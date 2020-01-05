@@ -26,7 +26,11 @@ const userSchema = mongoose.Schema(
       type: String,
       select: false
     },
-    resetPassword: {
+    resetToken: {
+      type: String,
+      select: false
+    },
+    resetHashedPassword: {
       type: String,
       select: false
     },

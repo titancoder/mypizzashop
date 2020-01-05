@@ -1,15 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-  signUp,
-  login,
-  forgotPassword
-} = require("../controllers/authController");
+const { login, forgotPassword } = require("../controllers/authController");
 
-router.route("/signup").get(signUp);
-
-router.route("/login").get(login);
+router.route("/login").post(login);
 
 router.route("/forgotpassword").get(forgotPassword);
 

@@ -1,4 +1,5 @@
 const express = require("express");
+const { authorize } = require("../controllers/authController");
 const router = express.Router();
 
 const {
@@ -11,7 +12,7 @@ const {
 
 router
   .route("/")
-  .get(getAllPizzas)
+  .get(authorize, getAllPizzas)
   .post(addNewPizza);
 
 router

@@ -35,6 +35,13 @@ app.use("/users", userRoutes);
 app.use("/toppings", toppingRoutes);
 app.use("/orders", orderRoutes);
 
+// app.use((err, req, res, next) => {
+//   res.status(err.statusCode).json({
+//     status: err.status,
+//     message: err.message
+//   });
+// });
+
 /* -------------------------------------------------------------------------- */
 /*                                   SERVER                                   */
 /* -------------------------------------------------------------------------- */
@@ -42,26 +49,3 @@ app.use("/orders", orderRoutes);
 app.listen("3000", () => {
   console.log("Listening on port 3000");
 });
-
-const User = require("./models/user");
-
-// Order.create(
-//   {
-//     order: [
-//       {
-//         "Super Pizza": 1,
-//         onion: 1,
-//         tomato: 1
-//       },
-//       {
-//         "Super Pizza": 3,
-//         onion: 1,
-//         mushroom: 1
-//       }
-//     ],
-//     amount: "400"
-//   },
-//   (err, docs) => {
-//     console.log(docs);
-//   }
-// );

@@ -1,5 +1,5 @@
 const express = require("express");
-const { authorize } = require("../controllers/authController");
+const { authorize, restrict } = require("../controllers/authController");
 const router = express.Router();
 
 const {
@@ -12,13 +12,13 @@ const {
 
 router
   .route("/")
-  .get(authorize, getAllPizzas)
-  .post(addNewPizza);
+  .get(getAllPizzas)
+  .post(authorize, restrict, addNewPizza);
 
 router
   .route("/:id")
   .get(getPizza)
-  .patch(editPizza)
-  .delete(deletePizza);
+  .patch(authorize, restrict, editPizza)
+  .delete(authorize, restrict, deletePizza);
 
 module.exports = router;

@@ -1,5 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const {
+  authorize,
+  restrict,
+  partialRestrict
+} = require("../controllers/authController");
 
 const {
   getAllOrders,
@@ -11,13 +16,13 @@ const {
 
 router
   .route("/")
-  .get(getAllOrders)
-  .post(addNewOrder);
+  .get(authorize, partialRestrict, getAllOrders)
+  .post(authorize, addNewOrder);
 
 router
   .route("/:id")
-  .get(getOrder)
-  .patch(editOrder)
-  .delete(deleteOrder);
+  .get(authorize, getOrder)
+  .patch(authorize, editOrder)
+  .delete(authorize, restrict, deleteOrder);
 
 module.exports = router;

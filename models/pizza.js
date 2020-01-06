@@ -11,18 +11,15 @@ const pizzaSchema = mongoose.Schema(
     description: {
       type: String,
       required: true,
-      trim: true,
-      unique: true
+      trim: true
     },
     hotness: {
       type: Number,
-      required: true,
-      unique: true
+      required: true
     },
     price: {
       type: Number,
-      required: true,
-      unique: true
+      required: true
     },
     image: {
       type: String,

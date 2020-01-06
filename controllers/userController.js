@@ -15,7 +15,7 @@ const jwt = require("jsonwebtoken");
 
 exports.getAllUsers = async (req, res) => {
   const allUsers = await User.find({});
-  console.log(req.headers.authorization.split(" ")[1]);
+  //console.log(req.headers.authorization.split(" ")[1]);
   try {
     res.status(200).json({
       success: true,
@@ -53,14 +53,15 @@ exports.signUp = async (req, res) => {
     console.log(err.message);
     res.status(400).json({
       success: false,
-      message: err.message
+      message: err
     });
   }
 };
 
 /* -------------------------------------------------------------------------- */
-/*                                  EDIT USER                                 */
+/*                                 UPDATE USER                                */
 /* -------------------------------------------------------------------------- */
+
 //Method    PATCH
 //Endpoint  /users/:id
 
@@ -70,7 +71,9 @@ exports.signUp = async (req, res) => {
 
 exports.editUser = async (req, res) => {
   try {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body);
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true
+    });
     res.status(200).json({
       success: true,
       data: updatedUser

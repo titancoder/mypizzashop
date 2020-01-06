@@ -3,7 +3,11 @@ const mongoose = require("mongoose");
 const orderSchema = mongoose.Schema(
   {
     order: [{}],
-    amount: Number
+    amount: Number,
+    orderedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
   },
   { timestamps: true }
 );

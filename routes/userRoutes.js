@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { authorize } = require("../controllers/authController");
+const { authorize, restrict } = require("../controllers/authController");
 
 const {
   getAllUsers,
@@ -10,13 +10,13 @@ const {
   editUser
 } = require("../controllers/userController");
 
-router.route("/").get(authorize, getAllUsers);
+router.route("/").get(authorize, restrict, getAllUsers);
 
 router.route("/signup").post(signUp);
 router
   .route("/:id")
-  .get(getUser)
-  .patch(editUser)
-  .delete(deleteUser);
+  .get(authorize, getUser)
+  .patch(authorize, editUser)
+  .delete(authorize, deleteUser);
 
 module.exports = router;

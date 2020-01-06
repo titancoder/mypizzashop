@@ -12,7 +12,6 @@ const Pizza = require("../models/pizza");
 
 exports.getAllPizzas = async (req, res) => {
   const allPizzas = await Pizza.find({});
-
   try {
     res.status(200).json({
       success: true,
@@ -30,9 +29,9 @@ exports.getAllPizzas = async (req, res) => {
 //Method    POST
 //Endpoint  /pizza
 
-/*---------*
-|ADMIN ONLY|
-*----------*/
+/*-------*
+|RESTRICT|
+*--------*/
 
 exports.addNewPizza = async (req, res) => {
   try {
@@ -51,18 +50,23 @@ exports.addNewPizza = async (req, res) => {
 };
 
 /* -------------------------------------------------------------------------- */
-/*                                 EDIT PIZZA                                 */
+/*                                UPDATE PIZZA                                */
 /* -------------------------------------------------------------------------- */
+
 //Method    PATCH
 //Endpoint  /pizza/:id
 
-/*---------*
-|ADMIN ONLY|
-*----------*/
+/*-------*
+|RESTRICT|
+*--------*/
 
 exports.editPizza = async (req, res) => {
   try {
-    const updatedPizza = await Pizza.findByIdAndUpdate(req.params.id, req.body);
+    const updatedPizza = await Pizza.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
     res.status(200).json({
       success: true,
       data: updatedPizza
@@ -81,9 +85,9 @@ exports.editPizza = async (req, res) => {
 //Method    DELETE
 //Endpoint  /pizza/:id
 
-/*---------*
-|ADMIN ONLY|
-*----------*/
+/*-------*
+|RESTRICT|
+*--------*/
 
 exports.deletePizza = async (req, res) => {
   try {

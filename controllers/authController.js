@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 
 /* -------------------------------------------------------------------------- */
-/*                    LOGIN === GET SINGLE USER & JWT AUTH                    */
+/*                                    LOGIN                                   */
 /* -------------------------------------------------------------------------- */
 
 exports.login = async (req, res, next) => {
@@ -32,15 +32,12 @@ exports.login = async (req, res, next) => {
     *---------------------------------------*/
     if (result) {
       const token = jwt.sign({ id: user._id }, "thisismysecrettoken");
+
       res.status(200).json({
         message: "Login Success",
         success: true,
         token: token
       });
-
-      /*---------------------------------------------------------------------------*
-      |AFTER TOKEN GENERATION, ATTACH USER TO REQUEST OBJECT AND FORWARD IT TO NEXT|
-      *----------------------------------------------------------------------------*/
 
       next();
     } else throw new Error("Password Incorrect");
@@ -62,11 +59,11 @@ exports.forgotPassword = async (req, res) => {
   if (user) {
     const resetToken = await crypto.randomBytes(64).toString("base64");
     const hasedResetPassword = await bcrypt.hash(resetToken, 10);
-    const result = await User.findByIdAndUpdate(user._id, {
-      resetHashedPassword: hasedResetPassword,
-      resetToken: resetToken
-    });
-    console.log(result);
+    user.resetHashedPassword = hasedResetPassword;
+    user.resetToken = resetToken;
+    user.passwordResetExpiresAt = Date.now() + 2 * 60 * 1000;
+
+    await user.save();
   }
   res.status(200).json({
     message: "Forgot Password",
@@ -81,22 +78,34 @@ exports.forgotPassword = async (req, res) => {
 exports.resetPassword = async (req, res) => {
   const enteredToken = req.body.token;
   const enteredPassword = req.body.password;
-  console.log(enteredToken);
-  console.log(enteredPassword);
+
+  //FIND USER BASED ON THE RESET TOKEN
   try {
     const user = await User.findOne({ resetToken: enteredToken }).select(
-      "+resetHashedPassword"
+      "+resetHashedPassword +passwordResetExpiresAt"
     );
-    console.log(user);
+
+    if (Date.now() > user.passwordResetExpiresAt) {
+      user.resetHashedPassword = undefined;
+      user.resetToken = undefined;
+      user.passwordResetExpiresAt = undefined;
+      await user.save();
+      throw new Error("Token has expired");
+    }
+
+    // COMPARE THE RESET HASHED PASSWORD STORED IN DB
+
     const result = await bcrypt.compare(enteredToken, user.resetHashedPassword);
     if (result) {
+      //IF SUCCESSFUL, UPDATE PASSWORD AND REMOVE THE UNNECESSARY FIELDS
+
       const updatedPassword = await bcrypt.hash(enteredPassword, 10);
-      const updatedUser = await User.findByIdAndUpdate(user._id, {
-        password: updatedPassword,
-        resetToken: undefined,
-        resetHashedPassword: undefined,
-        passwordUpdatedAt: Date.now()
-      });
+      user.password = updatedPassword;
+      user.passwordUpdatedAt = Date.now();
+      user.resetHashedPassword = undefined;
+      user.resetToken = undefined;
+      const updatedUser = await user.save();
+
       res.status(200).json({
         success: true,
         data: updatedUser
@@ -115,8 +124,20 @@ exports.resetPassword = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 exports.authorize = (req, res, next) => {
+  if (!req.headers.authorization) {
+    res.status(400).json({
+      success: false,
+      message: "No Authorization Token"
+    });
+  }
   const token = req.headers.authorization.split(" ")[1];
+
+  /* -------------------------------------------------------------------------- */
+  /*             IF JWT VERIFIED, ATTACH USER ID TO REQUEST OBEJECT             */
+  /* -------------------------------------------------------------------------- */
+
   jwt.verify(token, "thisismysecrettoken", (err, decoded) => {
+    req.user = decoded.id;
     if (err) {
       res.status(400).json({
         success: false,
@@ -124,5 +145,33 @@ exports.authorize = (req, res, next) => {
       });
     }
   });
+  next();
+};
+
+/* -------------------------------------------------------------------------- */
+/*                           RESTRICT TO ADMIN ONLY                           */
+/* -------------------------------------------------------------------------- */
+
+exports.restrict = async (req, res, next) => {
+  const { role } = await User.findById(req.user);
+
+  if (role === "admin") {
+    next();
+  } else
+    res.status(403).json({
+      success: false,
+      message: "Forbidden"
+    });
+};
+
+/* -------------------------------------------------------------------------- */
+/*                    PARTIAL RESTRICT (BOTH ADMIN & USER)                    */
+/* -------------------------------------------------------------------------- */
+
+exports.partialRestrict = async (req, res, next) => {
+  const { role } = await User.findById(req.user);
+  if (role === "admin") {
+    req.role = "admin";
+  } else req.role = "user";
   next();
 };

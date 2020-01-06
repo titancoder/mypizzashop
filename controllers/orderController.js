@@ -1,19 +1,25 @@
-const User = require("../models/user");
+const Order = require("../models/order");
 
 /* -------------------------------------------------------------------------- */
 /*                               GET ALL ORDERS                               */
 /* -------------------------------------------------------------------------- */
 // Method    GET
-// Endpoint  /users
+// Endpoint  /orders
 
-/*----------------*
-|PROTECTED & ADMIN|
-*-----------------*/
+/*-----------------*
+|ALL ORDERS - ADMIN|    
+*------------------*/
+/*-----------------*
+|USER ORDERS - USER|
+*------------------*/
 
 exports.getAllOrders = async (req, res) => {
-  const allOrders = await Order.find({});
-
+  const query = {};
+  if (req.role === "user") {
+    query.orderedBy = req.user;
+  }
   try {
+    const allOrders = await Order.find(query);
     res.status(200).json({
       success: true,
       count: allOrders.length,
@@ -28,10 +34,10 @@ exports.getAllOrders = async (req, res) => {
 /*                              CREATE NEW ORDER                              */
 /* -------------------------------------------------------------------------- */
 //Method    POST
-//Endpoint  /Orders
+//Endpoint  /orders
 
 /*--------*
-|PROTECTED|
+|AUTHORIZE|
 *---------*/
 
 exports.addNewOrder = async (req, res) => {
@@ -51,18 +57,25 @@ exports.addNewOrder = async (req, res) => {
 };
 
 /* -------------------------------------------------------------------------- */
-/*                                 EDIT ORDER                                 */
+/*                                UPDATE ORDER                                */
 /* -------------------------------------------------------------------------- */
+
 //Method    PATCH
-//Endpoint  /Orders/:id
+//Endpoint  /orders/:id
 
 /*--------*
-|PROTECTED|
+|AUTHORIZE|
 *---------*/
 
 exports.editOrder = async (req, res) => {
   try {
-    const updatedOrder = await Order.findByIdAndUpdate(req.params.id, req.body);
+    const updatedOrder = await Order.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    // const order = await Order.findOne({ _id: req.params.id });
+
     res.status(200).json({
       success: true,
       data: updatedOrder
@@ -79,11 +92,11 @@ exports.editOrder = async (req, res) => {
 /*                                DELETE ORDER                                */
 /* -------------------------------------------------------------------------- */
 //Method    DELETE
-//Endpoint  /Orders/:id
+//Endpoint  /orders/:id
 
-/*---------*
-|ADMIN ONLY|
-*----------*/
+/*-------*
+|RESTRICT|
+*--------*/
 
 exports.deleteOrder = async (req, res) => {
   try {
@@ -107,7 +120,7 @@ exports.deleteOrder = async (req, res) => {
 //Endpoint  /Orders/:id
 
 /*--------*
-|PROTECTED|
+|AUTHORIZE|
 *---------*/
 
 exports.getOrder = async (req, res) => {

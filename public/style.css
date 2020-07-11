@@ -7,6 +7,10 @@
 body {
 	background-color: #eeeeee;
 	font-family: "Muli", sans-serif;
+	background-image: url("images/Liquid-Cheese.svg");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 .wrapper {
@@ -18,6 +22,12 @@ body {
 .header {
 	background-color: #32e0c4;
 	color: whitesmoke;
+	position: relative;
+}
+
+.menu_items li {
+	list-style: none;
+	margin: 0 15px;
 }
 
 .content {
@@ -34,19 +44,48 @@ body {
 	flex-direction: column;
 	margin: 10px;
 	background-color: #f7f7f7;
-	border: #32e0c4 1px solid;
 	border-radius: 5px;
 	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	-webkit-box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.48);
+	-moz-box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.48);
+	box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.48);
 }
 img {
-	width: 98%;
+	width: 99%;
 	height: 75%;
+	opacity: 0.9;
 }
 
 .pizza_card span {
 	position: absolute;
-	bottom: 30px;
-	right: 5px;
+	bottom: 35px;
+	right: 8px;
+}
+
+.pizza_price {
+	background-color: #1c9c87;
+	color: #eeeeee;
+	width: 50%;
+	border-radius: 0 0 0 5px;
+	font-weight: 600;
+}
+.pizza_price:hover {
+	cursor: pointer;
+	background-color: #176b5d;
+}
+
+.add_to_cart {
+	background-color: #f9d56e;
+	width: 50%;
+	border-radius: 0 0 5px 0;
+	font-weight: 600;
+}
+
+.add_to_cart:hover {
+	background-color: #dab54f;
+	cursor: pointer;
 }
 .footer {
 	background-color: #32e0c4;

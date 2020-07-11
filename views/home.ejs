@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+			integrity="sha484-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+			crossorigin="anonymous"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Muli:wght@400;600&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="style.css" />
+		<title>Smoky Pizza</title>
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<h1>Header</h1>
+			</div>
+			<div class="content">
+				<div class="pizza_cards_container row my-5">
+					<div class="col-xl-3 col-lg-4 col-sm-6">
+						<div class="pizza_card">
+							<div class="pizza_card_top d-flex justify-content-between">
+								<div class="pizza_title ml-1">Title</div>
+								<div class="pizza_hotness d-flex align-items-center mr-1">
+									<img src="images/hotness.svg" alt="" />
+									<img src="images/hotness.svg" alt="" />
+									<img src="images/hotness.svg" alt="" />
+								</div>
+							</div>
+							<!-- <div class="pizza_img text-center"> -->
+							<img class="m-auto" src="images/pizza.jpg" alt="pizza" />
+							<span><img src="images/veg.svg" alt="" /></span>
+							<!-- </div> -->
+							<div
+								class="pizza_card_bottom d-flex mt-auto justify-content-around"
+							>
+								<div class="pizza_price">Price</div>
+								<div class="add_to_cart">Add to Cart</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-4 col-sm-6">
+						<div class="pizza_card">Card 1</div>
+					</div>
+					<div class="col-xl-3 col-lg-4 col-sm-6">
+						<div class="pizza_card">Card 1</div>
+					</div>
+					<div class="col-xl-3 col-lg-4 col-sm-6">
+						<div class="pizza_card">Card 1</div>
+					</div>
+					<div class="col-xl-3 col-lg-4 col-sm-6">
+						<div class="pizza_card">Card 1</div>
+					</div>
+					<div class="col-xl-3 col-lg-4 col-sm-6">
+						<div class="pizza_card">Card 1</div>
+					</div>
+					<div class="col-xl-3 col-lg-4 col-sm-6">
+						<div class="pizza_card">Card 1</div>
+					</div>
+					<div class="col-xl-3 col-lg-4 col-sm-6">
+						<div class="pizza_card">Card 1</div>
+					</div>
+				</div>
+				<!-- <% pizzaData.forEach(function(pizza){ %>
+				<h1><%= pizza.title %></h1>
+				<% }); %> -->
+			</div>
+			<div class="footer">
+				<h1>Footer</h1>
+			</div>
+		</div>
+	</body>
+</html>

@@ -11,6 +11,7 @@ body {
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
+	min-width: 300px;
 }
 
 .wrapper {
@@ -28,10 +29,16 @@ body {
 .menu_items li {
 	list-style: none;
 	margin: 0 15px;
+	cursor: pointer;
+}
+
+.menu_items li:hover {
+	color: teal;
 }
 
 .content {
 	width: 85%;
+	min-width: 300px;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -58,10 +65,18 @@ img {
 	opacity: 0.9;
 }
 
-.pizza_card span {
+.pizza_card .category {
 	position: absolute;
 	bottom: 35px;
 	right: 8px;
+}
+.pizza_card .new {
+	position: absolute;
+	bottom: 25px;
+	left: 8px;
+	height: 50px;
+	width: 50px;
+	transform: rotate(-20deg);
 }
 
 .pizza_price {
@@ -93,4 +108,87 @@ img {
 	margin-top: auto;
 	font-size: 1.2em;
 	height: 70px;
+}
+
+.modal_ {
+	display: none;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	top: 0;
+	left: 0;
+	background-color: rgba(0, 0, 0, 0.7);
+	z-index: 1;
+}
+
+.modal_content {
+	background-image: url("images/Liquid-Cheese.svg");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 40%;
+	min-width: 280px;
+	height: fit-content;
+	min-height: 220px;
+	margin: 20vh auto;
+	border-radius: 10px;
+	-webkit-box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.48);
+	-moz-box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.48);
+	box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.48);
+}
+
+.hide {
+	display: none;
+}
+
+.login {
+	background-color: #eee;
+	border-radius: 10px 0 0 0;
+}
+.signup {
+	background-color: #eee;
+	border-radius: 0 10px 0 0;
+}
+
+.hide {
+	display: none;
+}
+
+#login:checked + label {
+	background-color: #32e0c4;
+}
+
+#signup:checked + label {
+	background-color: #32e0c4;
+}
+
+.button {
+	background-color: #32e0c4;
+	border-style: none;
+	border-radius: 5px;
+	-webkit-box-shadow: -1px 0px 7px -2px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow: -1px 0px 7px -2px rgba(0, 0, 0, 0.75);
+	box-shadow: -1px 0px 7px -2px rgba(0, 0, 0, 0.75);
+	cursor: pointer;
+}
+
+.button:hover {
+	background-color: #22bba1;
+}
+
+.form_header {
+	border-bottom: 1px solid #32e0c4;
+}
+
+.primary {
+	background-color: #32e0c4;
+}
+
+.top-borders {
+	border-radius: 10px 10px 0 0;
+}
+
+.pointer {
+	cursor: pointer;
 }

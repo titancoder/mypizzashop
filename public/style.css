@@ -75,6 +75,11 @@ img {
 	bottom: 35px;
 	right: 8px;
 }
+
+.category img {
+	height: 25px;
+	width: 25px;
+}
 .pizza_card .new {
 	position: absolute;
 	bottom: 25px;

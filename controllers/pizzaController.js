@@ -11,16 +11,16 @@ const Pizza = require("../models/pizza");
 *--------------*/
 
 exports.getAllPizzas = async (req, res) => {
-  const allPizzas = await Pizza.find({});
-  try {
-    res.status(200).json({
-      success: true,
-      count: allPizzas.length,
-      data: allPizzas
-    });
-  } catch (err) {
-    console.log(err.message);
-  }
+	const allPizzas = await Pizza.find({});
+	try {
+		res.status(200).json({
+			success: true,
+			count: allPizzas.length,
+			data: allPizzas,
+		});
+	} catch (err) {
+		console.log(err.message);
+	}
 };
 
 /* -------------------------------------------------------------------------- */
@@ -34,19 +34,23 @@ exports.getAllPizzas = async (req, res) => {
 *--------*/
 
 exports.addNewPizza = async (req, res) => {
-  try {
-    const newPizza = await Pizza.create(req.body);
-    res.status(200).json({
-      success: true,
-      data: newPizza
-    });
-  } catch (err) {
-    console.log(err.message);
-    res.status(400).json({
-      success: false,
-      message: err.message
-    });
-  }
+	//console.log(req.file);
+
+	req.body.image = `images/pizza/${req.file.filename}`;
+	console.log(req.body);
+	try {
+		const newPizza = await Pizza.create(req.body);
+		res.status(200).json({
+			success: true,
+			data: newPizza,
+		});
+	} catch (err) {
+		console.log(err.message);
+		res.status(400).json({
+			success: false,
+			message: err.message,
+		});
+	}
 };
 
 /* -------------------------------------------------------------------------- */
@@ -61,22 +65,22 @@ exports.addNewPizza = async (req, res) => {
 *--------*/
 
 exports.editPizza = async (req, res) => {
-  try {
-    const updatedPizza = await Pizza.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.status(200).json({
-      success: true,
-      data: updatedPizza
-    });
-  } catch (err) {
-    res.status(400).json({
-      success: false,
-      message: err.message
-    });
-  }
+	try {
+		const updatedPizza = await Pizza.findByIdAndUpdate(
+			req.params.id,
+			req.body,
+			{ new: true }
+		);
+		res.status(200).json({
+			success: true,
+			data: updatedPizza,
+		});
+	} catch (err) {
+		res.status(400).json({
+			success: false,
+			message: err.message,
+		});
+	}
 };
 
 /* -------------------------------------------------------------------------- */
@@ -90,18 +94,18 @@ exports.editPizza = async (req, res) => {
 *--------*/
 
 exports.deletePizza = async (req, res) => {
-  try {
-    await Pizza.findByIdAndDelete(req.params.id);
-    res.status(200).json({
-      success: true,
-      data: {}
-    });
-  } catch {
-    res.status(400).json({
-      success: false,
-      message: err.message
-    });
-  }
+	try {
+		await Pizza.findByIdAndDelete(req.params.id);
+		res.status(200).json({
+			success: true,
+			data: {},
+		});
+	} catch {
+		res.status(400).json({
+			success: false,
+			message: err.message,
+		});
+	}
 };
 
 /* -------------------------------------------------------------------------- */
@@ -115,16 +119,16 @@ exports.deletePizza = async (req, res) => {
 *--------------*/
 
 exports.getPizza = async (req, res) => {
-  try {
-    const pizza = await Pizza.findById(req.params.id);
-    res.status(200).json({
-      success: true,
-      data: pizza
-    });
-  } catch (err) {
-    res.status(400).json({
-      success: false,
-      message: err
-    });
-  }
+	try {
+		const pizza = await Pizza.findById(req.params.id);
+		res.status(200).json({
+			success: true,
+			data: pizza,
+		});
+	} catch (err) {
+		res.status(400).json({
+			success: false,
+			message: err,
+		});
+	}
 };

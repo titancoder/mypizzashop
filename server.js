@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 
 const app = express();
+const cookieParser = require("cookie-parser");
 const pizzaRoutes = require("./routes/pizzaRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -10,11 +11,10 @@ const toppingRoutes = require("./routes/toppingRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const viewRoutes = require("./routes/viewRoutes");
 const mongoose = require("mongoose");
-const multer = require("multer");
-const upload = multer({ dest: __dirname + "/uploads/images" });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use(express.static("public"));
 app.set("views", path.join(__dirname, "views"));
@@ -45,6 +45,11 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/toppings", toppingRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/", viewRoutes);
+
+// app.post("/test", upload.single("photo"), (req, res) => {
+// 	console.log(req.body);
+// 	console.log(req.file);
+// });
 
 // app.use((err, req, res, next) => {
 //   res.status(err.statusCode).json({

@@ -6,33 +6,41 @@
 			<%- include('partials/modal') %> <%- include('partials/header') %>
 			<div class="content">
 				<div class="pizza_cards_container row my-5">
+					<% pizzaData.forEach(function(pizza){ %>
 					<div class="col-xl-3 col-lg-4 col-sm-6">
 						<div class="pizza_card p-1">
 							<div class="pizza_card_top d-flex justify-content-between">
-								<div class="pizza_title ml-1">Awesome Pizza</div>
+								<div class="pizza_title ml-1"><%= pizza.title %></div>
 								<div class="pizza_hotness d-flex align-items-center mr-1">
+									<% for (let i= 0; i< pizza.hotness; i++) {%>
+
 									<img src="images/hotness.svg" alt="" />
-									<img src="images/hotness.svg" alt="" />
-									<img src="images/hotness.svg" alt="" />
+									<% } %>
 								</div>
 							</div>
 							<!-- <div class="pizza_img text-center"> -->
-							<img class="mx-auto mb-1" src="images/pizza.jpg" alt="pizza" />
-							<span class="category"><img src="images/veg.svg" alt="" /></span>
+							<img class="mx-auto mb-1" src="<%= pizza.image %>" alt="pizza" />
+							<span class="category"
+								><img src="images/<%= pizza.category %>.svg" alt=""
+							/></span>
 							<span class="new"><img src="images/new.svg" alt="" /></span>
 							<!-- </div> -->
 							<div
 								class="pizza_card_bottom d-flex mt-auto justify-content-between"
 							>
-								<div class="pizza_price text-center">485</div>
-								<div class="add_to_cart text-center">Add to Cart</div>
+								<div class="pizza_price text-center"><%= pizza.price %></div>
+								<div
+									class="add_to_cart text-center"
+									id="<%= pizza._id %> "
+									onclick="display(this)"
+								>
+									Add to Cart
+								</div>
 							</div>
 						</div>
 					</div>
+					<% }); %>
 				</div>
-				<!-- <% pizzaData.forEach(function(pizza){ %>
-				<h1><%= pizza.title %></h1>
-				<% }); %> -->
 			</div>
 			<%- include('partials/footer') %>
 		</div>

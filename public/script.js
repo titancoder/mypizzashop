@@ -19,6 +19,7 @@ const closeModal = (e) => {
 	if (e.target == modal) {
 		modalForgotPassword.style.display = "none";
 		modalLoginSignUp.style.display = "flex";
+		forms.reset();
 		login_form.style.display = "block";
 		signup_form.style.display = "none";
 		login_label.click();
@@ -27,7 +28,7 @@ const closeModal = (e) => {
 };
 
 window.addEventListener("click", closeModal);
-
+const forms = document.getElementById("forms");
 const login_label = document.getElementById("login_label");
 const signup_label = document.getElementById("signup_label");
 const login_form = document.getElementById("login_form");
@@ -49,13 +50,9 @@ const modalForgotPassword = document.getElementById("modal_content_fp");
 const activateLoginSignUpForm = (e) => {
 	modalForgotPassword.style.display = "none";
 	modalLoginSignUp.style.display = "flex";
-	//modalForgotPassword.classList.replace("hide", "d-flex");
-	//modalLoginSignUp.classList.replace("d-flex", "hide");
 };
 
 const activateForgotPasswordForm = (e) => {
 	modalLoginSignUp.style.display = "none";
 	modalForgotPassword.style.display = "flex";
-	//modalLoginSignUp.classList.replace("hide", "d-flex");
-	//modalForgotPassword.classList.replace("d-flex", "hide");
 };

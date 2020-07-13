@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+	<%- include('partials/head') %>
+	<body>
+		<div class="wrapper">
+			<%- include('partials/modal') %> <%- include('partials/header') %>
+			<div class="content">
+				<div class="pizza_cards_container row my-5">
+					<form
+						id="create_pizza_form"
+						class="w-75 mx-auto"
+						enctype="multipart/form-data"
+					>
+						<div>
+							<h1>Create New Pizza</h1>
+						</div>
+
+						<div class="row">
+							<div class="col-12 col-xl-6">
+								<div class="form-group pb-1">
+									<div class="row">
+										<label for="" class="col-12 col-sm-6">Title</label>
+										<input
+											class="form-control input-sm col-12 col-sm-6"
+											name="title"
+											type="text"
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="col-12 col-xl-6">
+								<div class="form-group pb-1">
+									<div class="row">
+										<label for="" class="col-12 col-sm-6">Description</label>
+										<input
+											class="form-control input-sm col-12 col-sm-6"
+											name="description"
+											type="text"
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="col-12 col-xl-6">
+								<div class="form-group pb-1">
+									<div class="row">
+										<label for="" class="col-12 col-sm-6">Category</label>
+										<div class="col-sm-3 col-6 p-0 text-center">
+											<input
+												type="radio"
+												name="category"
+												id="veg"
+												value="veg"
+												class="hide"
+												checked
+											/>
+											<label
+												id="veg_label"
+												for="veg"
+												class="w-100 m-0 p-2 pointer"
+												>Veg</label
+											>
+										</div>
+										<div class="col-sm-3 col-6 p-0 text-center">
+											<input
+												type="radio"
+												name="category"
+												id="non-veg"
+												value="non-veg"
+												class="hide"
+											/>
+											<label
+												id="nonveg_label"
+												for="non-veg"
+												class="w-100 m-0 p-2 pointer"
+												>Non Veg</label
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-12 col-xl-6">
+								<div class="form-group pb-1">
+									<div class="row">
+										<label for="" class="col-12 col-sm-6">Hotness</label>
+										<input
+											class="form-control input-sm col-12 col-sm-6"
+											name="hotness"
+											type="text"
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="col-12 col-xl-6">
+								<div class="form-group pb-1">
+									<div class="row">
+										<label for="" class="col-12 col-sm-6">Price</label>
+										<input
+											class="form-control input-sm col-12 col-sm-6"
+											name="price"
+											type="text"
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="col-12 col-xl-6">
+								<div class="form-group pb-1">
+									<div class="row">
+										<label for="" class="col-12 col-sm-6">Image</label>
+										<input
+											class="input-sm col-12 col-sm-6"
+											type="file"
+											accept="image/*"
+											name="photo"
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row justify-content-between m-0">
+							<button type="reset" class="py-1 col-lg-6 col-12 button">
+								Reset
+							</button>
+							<button type="submit" class="py-1 col-lg-6 col-12 button">
+								Create
+							</button>
+						</div>
+					</form>
+				</div>
+				<!-- <% pizzaData.forEach(function(pizza){ %>
+				<h1><%= pizza.title %></h1>
+				<% }); %> -->
+			</div>
+			<%- include('partials/footer') %>
+		</div>
+		<script src="script.js"></script>
+	</body>
+</html>

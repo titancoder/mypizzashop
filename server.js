@@ -1,5 +1,5 @@
 const express = require("express");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const path = require("path");
 
 const app = express();
@@ -10,6 +10,11 @@ const toppingRoutes = require("./routes/toppingRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const viewRoutes = require("./routes/viewRoutes");
 const mongoose = require("mongoose");
+const multer = require("multer");
+const upload = multer({ dest: __dirname + "/uploads/images" });
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 app.set("views", path.join(__dirname, "views"));
@@ -28,8 +33,7 @@ mongoose.connect("mongodb://localhost:27017/mypizzashop", {
 /*                                 MIDDLEWARES                                */
 /* -------------------------------------------------------------------------- */
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.urlencoded({ extended: false }));
 
 /* -------------------------------------------------------------------------- */
 /*                                MOUNT ROUTES                                */

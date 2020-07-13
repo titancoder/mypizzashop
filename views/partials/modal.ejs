@@ -1,0 +1,136 @@
+<div id="modal" class="modal_">
+	<div
+		class="modal_content pb-lg-3 pb-5 flex-column animate__animated animate__fadeInDown"
+		id="modal_content"
+		style="display: flex; position: relative;"
+	>
+		<div
+			class="form_header row w-100 mb-4 m-0 justify-content-around align-items-center"
+		>
+			<div class="col-6 p-0 text-center">
+				<input type="radio" name="users" id="login" class="hide" checked />
+				<label id="login_label" for="login" class="login w-100 m-0 p-2 pointer"
+					>Login</label
+				>
+			</div>
+			<div class="col-6 p-0 text-center">
+				<input type="radio" name="users" id="signup" class="hide" />
+				<label
+					id="signup_label"
+					for="signup"
+					class="signup w-100 m-0 p-2 pointer"
+					>Sign Up</label
+				>
+			</div>
+		</div>
+		<div id="login_form">
+			<form id="forms" class="w-75 mx-auto">
+				<div class="form-group pb-2">
+					<input
+						class="form-control input-sm"
+						name="username"
+						type="text"
+						placeholder="Username"
+					/>
+				</div>
+				<div class="form-group pb-0 pb-lg-2 mb-1 mb-lg-2">
+					<input
+						class="form-control input-sm"
+						name="password"
+						type="password"
+						placeholder="Password"
+					/>
+				</div>
+
+				<button type="submit" class="button py-1 mt-1 col-lg-6 col-12">
+					Login
+				</button>
+			</form>
+			<!-- <div class="form_footer row mt-2"> -->
+			<span
+				style="position: absolute; bottom: 15px; right: 15px;"
+				id="forgot-password"
+				class="pointer text-center pt-3"
+				onclick="activateForgotPasswordForm()"
+			>
+				<u>Forgot password?</u>
+			</span>
+			<!-- </div> -->
+		</div>
+
+		<form id="signup_form" class="w-75 mx-auto hide">
+			<div class="form-group pb-2">
+				<input
+					class="form-control input-sm"
+					name="name"
+					type="text"
+					placeholder="Name"
+				/>
+			</div>
+			<div class="form-group pb-2">
+				<input
+					class="form-control input-sm"
+					name="email"
+					type="text"
+					placeholder="Email"
+				/>
+			</div>
+			<div class="form-group pb-2">
+				<input
+					class="form-control input-sm"
+					name="password"
+					type="password"
+					placeholder="Password"
+				/>
+			</div>
+			<div class="form-group pb-2">
+				<input
+					class="form-control input-sm"
+					name="confirm"
+					type="password"
+					placeholder="Confirm Password"
+				/>
+			</div>
+			<div class="row justify-content-end m-0">
+				<button type="submit" class="py-1 col-lg-6 button">
+					Sign Up
+				</button>
+			</div>
+		</form>
+	</div>
+	<div
+		class="modal_content pb-3 flex-column animate__animated animate__fadeInDown"
+		id="modal_content_fp"
+		style="display: none;"
+	>
+		<div
+			class="form_header primary top-borders p-2 row w-100 mb-4 m-0 justify-content-around align-items-center"
+		>
+			Forgot Password
+		</div>
+		<div class="fp_form">
+			<form id="" class="w-75 mx-auto">
+				<div class="form-group pb-0 pb-lg-2 mb-1 mb-lg-2">
+					<input
+						class="form-control input-sm"
+						name="email"
+						type="text"
+						placeholder="Email"
+					/>
+				</div>
+				<div class="form_footer row m-0">
+					<button type="submit" class="button py-1 col-lg-6 col-12">
+						Submit
+					</button>
+				</div>
+			</form>
+			<span
+				id="login-or-signup"
+				style="position: absolute; bottom: 15px; right: 15px;"
+				class="mx-auto pointer p-2 text-center"
+				onclick="activateLoginSignUpForm()"
+				><u>Login or Sign up</u></span
+			>
+		</div>
+	</div>
+</div>

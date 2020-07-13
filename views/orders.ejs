@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	<%- include('partials/head') %>
+	<body>
+		<div class="wrapper">
+			<%- include('partials/modal') %> <%- include('partials/header') %>
+			<div class="content">
+				<div class="pizza_cards_container row my-5">
+					<div class="col">
+						<div class="row m-0 text-center">
+							<div class="order-date col-6 col-md">
+								<div class="d-flex">
+									<div class="month_">
+										JUL
+									</div>
+									<div class="day_">
+										<div class="d-flex flex-column">
+											<div class="day p-1">
+												12
+											</div>
+											<div class="year">
+												2020
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="order-no col-6 col-md">
+								order no
+							</div>
+							<div class="order-address col-12 col-md">
+								address
+							</div>
+							<div class="order-amount col-6 col-md">
+								Order amount
+							</div>
+							<div class="order-status col-6 col-md">
+								Order status
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- <% pizzaData.forEach(function(pizza){ %>
+				<h1><%= pizza.title %></h1>
+				<% }); %> -->
+			</div>
+			<%- include('partials/footer') %>
+		</div>
+		<script src="script.js"></script>
+	</body>
+</html>

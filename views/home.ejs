@@ -1,190 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link
-			rel="stylesheet"
-			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-			integrity="sha484-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-			crossorigin="anonymous"
-		/>
-		<link
-			href="https://fonts.googleapis.com/css2?family=Muli:wght@400;600&display=swap"
-			rel="stylesheet"
-		/>
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"
-		/>
-		<link
-			rel="stylesheet"
-			href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-		/>
-		<link rel="stylesheet" href="style.css" />
-		<title>Smoky Pizza</title>
-	</head>
+	<%- include('partials/head') %>
 	<body>
 		<div class="wrapper">
-			<div id="modal" class="modal_">
-				<div
-					class="modal_content pb-3 flex-column align-items-center animate__animated animate__fadeInDown"
-					id="modal_content"
-					style="display: flex;"
-				>
-					<div
-						class="form_header row w-100 mb-4 justify-content-around align-items-center"
-					>
-						<div class="col-6 p-0 text-center">
-							<input
-								type="radio"
-								name="users"
-								id="login"
-								class="hide"
-								checked
-							/>
-							<label
-								id="login_label"
-								for="login"
-								class="login w-100 m-0 p-2 pointer"
-								>Login</label
-							>
-						</div>
-						<div class="col-6 p-0 text-center">
-							<input type="radio" name="users" id="signup" class="hide" />
-							<label
-								id="signup_label"
-								for="signup"
-								class="signup w-100 m-0 p-2 pointer"
-								>Sign Up</label
-							>
-						</div>
-					</div>
-					<form id="login_form" class="w-75 mx-auto">
-						<div class="form-group pb-2">
-							<input
-								class="form-control input-sm"
-								id="username"
-								type="text"
-								placeholder="Username"
-							/>
-						</div>
-						<div class="form-group pb-0 pb-lg-2 mb-1 mb-lg-2">
-							<input
-								class="form-control input-sm"
-								id="password"
-								type="password"
-								placeholder="Password"
-							/>
-						</div>
-						<div class="form_footer row m-0">
-							<div
-								id="forgot-password"
-								class="pointer col-lg-6 col-12 text-center my-auto pb-lg-0 pb-3"
-								onclick="activateForgotPasswordForm()"
-							>
-								<u>Forgot password?</u>
-							</div>
-							<button type="submit" class="button py-1 col-lg-6 col-12">
-								Login
-							</button>
-						</div>
-					</form>
-					<form id="signup_form" class="w-75 mx-auto hide">
-						<div class="form-group pb-2">
-							<input
-								class="form-control input-sm"
-								id="name"
-								type="text"
-								placeholder="Name"
-							/>
-						</div>
-						<div class="form-group pb-2">
-							<input
-								class="form-control input-sm"
-								id="email"
-								type="password"
-								placeholder="Email"
-							/>
-						</div>
-						<div class="form-group pb-2">
-							<input
-								class="form-control input-sm"
-								id="pass"
-								type="password"
-								placeholder="Password"
-							/>
-						</div>
-						<div class="form-group pb-2">
-							<input
-								class="form-control input-sm"
-								id="confirm_pass"
-								type="password"
-								placeholder="Confirm Password"
-							/>
-						</div>
-						<div class="row justify-content-end m-0">
-							<button type="submit" class="py-1 col-lg-6 button">
-								Sign Up
-							</button>
-						</div>
-					</form>
-				</div>
-				<div
-					class="modal_content pb-3 flex-column align-items-center animate__animated animate__fadeInDown"
-					id="modal_content_fp"
-					style="display: none;"
-				>
-					<div
-						class="form_header primary top-borders p-2 row w-100 mb-4 justify-content-around align-items-center"
-					>
-						Forgot Password
-					</div>
-					<form id="fp_form" class="w-75 mx-auto">
-						<div class="form-group pb-0 pb-lg-2 mb-1 mb-lg-2">
-							<input
-								class="form-control input-sm"
-								name="email"
-								type="text"
-								placeholder="Email"
-							/>
-						</div>
-						<div class="form_footer row m-0">
-							<span
-								id="login-or-signup"
-								class="my-auto pointer col-lg-6 col-12 p-2 text-center"
-								onclick="activateLoginSignUpForm()"
-								><u>Login or Sign up</u></span
-							>
-							<button type="submit" class="button py-1 col-lg-6 col-12">
-								Submit
-							</button>
-						</div>
-					</form>
-				</div>
-			</div>
-			<div class="header d-block d-sm-flex justify-content-between py-1">
-				<div class="brand d-flex justify-content-between">
-					<h3 class="px-3 my-auto">YumYum Pizza</h3>
-					<div class="px-3 d-sm-none my-auto" onclick="toggle()">
-						<i id="toggle" class="fa fa-bars"></i>
-					</div>
-				</div>
-
-				<ul
-					id="toggle_menu"
-					class="menu_items d-none d-sm-flex my-auto px-3 text-center"
-				>
-					<li class="py-sm-0 py-2">Home</li>
-					<li class="py-sm-0 py-2">About Us</li>
-					<li class="py-sm-0 py-2">Contact</li>
-					<!-- <li>Profile</li> -->
-					<li id="login" class="py-sm-0 py-2" onclick="openLoginForm()">
-						Login
-					</li>
-					<li class="py-sm-0 py-2">Sign Up</li>
-				</ul>
-			</div>
+			<%- include('partials/modal') %> <%- include('partials/header') %>
 			<div class="content">
 				<div class="pizza_cards_container row my-5">
 					<div class="col-xl-3 col-lg-4 col-sm-6">
@@ -210,35 +29,12 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-xl-3 col-lg-4 col-sm-6">
-						<div class="pizza_card">Card 1</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-sm-6">
-						<div class="pizza_card">Card 1</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-sm-6">
-						<div class="pizza_card">Card 1</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-sm-6">
-						<div class="pizza_card">Card 1</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-sm-6">
-						<div class="pizza_card">Card 1</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-sm-6">
-						<div class="pizza_card">Card 1</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-sm-6">
-						<div class="pizza_card">Card 1</div>
-					</div>
 				</div>
 				<!-- <% pizzaData.forEach(function(pizza){ %>
 				<h1><%= pizza.title %></h1>
 				<% }); %> -->
 			</div>
-			<div class="footer">
-				<h1>Footer</h1>
-			</div>
+			<%- include('partials/footer') %>
 		</div>
 		<script src="script.js"></script>
 	</body>

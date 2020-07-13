@@ -1,0 +1,25 @@
+<div class="header d-block d-sm-flex justify-content-between py-1">
+	<div class="brand d-flex justify-content-between">
+		<h3 class="px-3 my-auto">YumYum Pizza</h3>
+		<div class="m-0 p-0">
+			<img src="images/cart.svg" alt="" />
+		</div>
+		<div class="px-3 d-sm-none my-auto" onclick="toggle()">
+			<i id="toggle" class="fa fa-bars"></i>
+		</div>
+	</div>
+
+	<ul
+		id="toggle_menu"
+		class="menu_items d-none d-sm-flex my-auto px-3 text-center"
+	>
+		<li class="py-sm-0 py-2">Home</li>
+		<li class="py-sm-0 py-2">About Us</li>
+		<li class="py-sm-0 py-2">Contact</li>
+		<!-- <li>Profile</li> -->
+		<li id="login" class="py-sm-0 py-2" onclick="openLoginForm()">
+			Login
+		</li>
+		<li class="py-sm-0 py-2">Sign Up</li>
+	</ul>
+</div>

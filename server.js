@@ -11,12 +11,15 @@ const toppingRoutes = require("./routes/toppingRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const viewRoutes = require("./routes/viewRoutes");
 const mongoose = require("mongoose");
+const cors = require("cors");
+
+app.use(cors({ credentials: true }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use(express.static("public"));
+app.use(express.static("public", { maxAge: 3600000 }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 

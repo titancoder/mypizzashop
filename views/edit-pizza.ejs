@@ -10,9 +10,11 @@
 						id="signup_form"
 						class="w-75 mx-auto"
 						enctype="multipart/form-data"
+						action="/pizza/<%= pizza._id %>"
+						method="POST"
 					>
 						<div>
-							<h1>Awesome Pizza</h1>
+							<h1><%= pizza.title %></h1>
 						</div>
 						<!-- <div>
 							<img src="images/pizza.jpg" alt="pizza" />
@@ -27,6 +29,8 @@
 											class="form-control input-sm col-12 col-sm-6"
 											id="name"
 											type="text"
+											value="<%= pizza._id %>"
+											disabled
 										/>
 									</div>
 								</div>
@@ -39,6 +43,7 @@
 											class="form-control input-sm col-12 col-sm-6"
 											name="title"
 											type="text"
+											value="<%= pizza.title %>"
 										/>
 									</div>
 								</div>
@@ -51,6 +56,7 @@
 											class="form-control input-sm col-12 col-sm-6"
 											name="description"
 											type="text"
+											value="<%= pizza.description %>"
 										/>
 									</div>
 								</div>
@@ -63,6 +69,7 @@
 											class="form-control input-sm col-12 col-sm-6"
 											name="category"
 											type="text"
+											value="<%= pizza.category %>"
 										/>
 									</div>
 								</div>
@@ -75,6 +82,7 @@
 											class="form-control input-sm col-12 col-sm-6"
 											name="hotness"
 											type="text"
+											value="<%= pizza.hotness %>"
 										/>
 									</div>
 								</div>
@@ -87,6 +95,7 @@
 											class="form-control input-sm col-12 col-sm-6"
 											name="price"
 											type="text"
+											value="<%= pizza.price %>"
 										/>
 									</div>
 								</div>
@@ -116,12 +125,9 @@
 						</div>
 					</form>
 				</div>
-				<!-- <% pizzaData.forEach(function(pizza){ %>
-				<h1><%= pizza.title %></h1>
-				<% }); %> -->
 			</div>
 			<%- include('partials/footer') %>
 		</div>
-		<script src="script.js"></script>
+		<script src="/script.js"></script>
 	</body>
 </html>

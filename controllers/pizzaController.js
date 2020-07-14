@@ -34,10 +34,6 @@ exports.getAllPizzas = async (req, res) => {
 *--------*/
 
 exports.addNewPizza = async (req, res) => {
-	//console.log(req.file);
-
-	req.body.image = `images/pizza/${req.file.filename}`;
-	console.log(req.body);
 	try {
 		const newPizza = await Pizza.create(req.body);
 		res.status(200).json({

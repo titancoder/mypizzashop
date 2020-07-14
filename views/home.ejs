@@ -29,6 +29,7 @@
 								class="pizza_card_bottom d-flex mt-auto justify-content-between"
 							>
 								<div class="pizza_price text-center"><%= pizza.price %></div>
+								<% if (locals.role==='delta' || !locals.role){ %>
 								<div
 									class="add_to_cart text-center"
 									id="<%= pizza._id %> "
@@ -36,6 +37,20 @@
 								>
 									Add to Cart
 								</div>
+								<% } %> <% if (locals.role==='alpha'){ %>
+								<div class="add_to_cart text-center row m-0">
+									<div class="col p-0">
+										<a href="/pizza/<%= pizza._id %>">Edit</a>
+									</div>
+
+									<div
+										class="col p-0 add_to_cart"
+										style="background-color: #e8505b; color: whitesmoke;"
+									>
+										<a href="/pizza/<%= pizza._id %>/del">Delete</a>
+									</div>
+								</div>
+								<% } %>
 							</div>
 						</div>
 					</div>

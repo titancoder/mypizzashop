@@ -127,15 +127,17 @@ exports.resetPassword = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 exports.authorize = (req, res, next) => {
-	// if (!req.headers.authorization) {
+	// if (req.headers.authorization) {
 	// 	res.status(400).json({
 	// 		success: false,
 	// 		message: "No Authorization Token",
 	// 	});
 	// }
-	// const token = req.headers.authorization.split(" ")[1];
 
-	const token = req.cookies.jwt;
+	// if (req.headers.authorization) {
+	// 	token = req.headers.authorization.split(" ")[1];
+	// } else {
+	let token = req.headers.cookie;
 
 	/* -------------------------------------------------------------------------- */
 	/*             IF JWT VERIFIED, ATTACH USER ID TO REQUEST OBEJECT             */
@@ -194,6 +196,7 @@ exports.isLoggedIn = (req, res, next) => {
 			return next();
 		}
 		res.locals.role = decoded.role;
+		req.role = decoded.role;
 	});
 	next();
 };

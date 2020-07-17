@@ -21,10 +21,20 @@ exports.loginUser = (req, res) => {
 		.catch((err) => console.log(err.message));
 };
 
+exports.signUpUser = (req, res) => {
+	axios
+		.post("http://localhost:3000/api/v1/users/signup", req.body)
+		.then(({ data }) => {
+			res.cookie("jwt", data.token, {
+				maxAge: 30 * 60 * 1000,
+			});
+			res.redirect("/");
+		})
+		.catch((err) => console.log(err.message));
+};
+
 exports.renderPizzaPage = (req, res) => {
-	console.log(req.role);
-	if (!req.role || req.role === "delta") {
-		//console.log("yoyo");
+	if (!req.user.role || req.user.role === "delta") {
 		res.redirect("/");
 	}
 	res.render("create-pizza");
@@ -45,7 +55,7 @@ exports.createPizza = async (req, res) => {
 
 exports.renderEditPizzaPage = async (req, res) => {
 	const id = req.params.id;
-	// console.log(id);
+
 	try {
 		const { data } = await axios.get(
 			`http://localhost:3000/api/v1/pizza/${id}`
@@ -80,6 +90,113 @@ exports.deletePizza = async (req, res) => {
 		})
 		.then(({ data }) => {
 			res.redirect("/");
+		})
+		.catch((err) => console.log(err.message));
+};
+
+exports.placeOrder = async (req, res) => {
+	req.body.orderedBy = req.user;
+	await axios
+		.post(`http://localhost:3000/api/v1/orders`, req.body, {
+			headers: {
+				Cookie: `${req.cookies.jwt}`,
+			},
+		})
+		.then(({ data }) => {
+			console.log(data.data);
+			res.redirect("/");
+		})
+		.catch((err) => console.log(err.message));
+};
+
+exports.renderOrdersPage = async (req, res) => {
+	try {
+		const { data } = await axios.get(`http://localhost:3000/api/v1/orders`, {
+			headers: {
+				Cookie: `${req.cookies.jwt}`,
+			},
+		});
+
+		data.data.forEach((order) => {
+			order.createdAt = new Date(order.createdAt).toLocaleDateString("de-DE");
+		});
+
+		res.render("orders", { data: data.data });
+	} catch (err) {
+		console.log(err.message);
+	}
+};
+exports.renderOrderDetailPage = async (req, res) => {
+	const id = req.params.id;
+
+	try {
+		const { data } = await axios.get(
+			`http://localhost:3000/api/v1/orders/${id}`,
+			{
+				headers: {
+					Cookie: `${req.cookies.jwt}`,
+				},
+			}
+		);
+		console.log(data);
+
+		res.render("order-detail", { data: data.data });
+	} catch (err) {
+		console.log(err.message);
+	}
+};
+
+exports.renderCartPage = (req, res) => {
+	res.render("cart", { role: req.user ? req.user.role : "" });
+};
+
+exports.renderProfilePage = (req, res) => {
+	res.render("profile", { data: req.user });
+};
+
+exports.renderUsersPage = async (req, res) => {
+	try {
+		const { data } = await axios.get(`http://localhost:3000/api/v1/users`, {
+			headers: {
+				Cookie: `${req.cookies.jwt}`,
+			},
+		});
+
+		res.render("users", { data: data.data });
+	} catch (err) {
+		console.log(err.message);
+	}
+};
+
+exports.renderEditProfilePage = async (req, res) => {
+	const id = req.params.id;
+
+	try {
+		const { data } = await axios.get(
+			`http://localhost:3000/api/v1/users/${id}`,
+			{
+				headers: {
+					Cookie: `${req.cookies.jwt}`,
+				},
+			}
+		);
+		res.render("edit-profile", { data: data.data });
+	} catch (err) {
+		console.log(err.message);
+	}
+};
+
+exports.updateUser = async (req, res) => {
+	const id = req.params.id;
+
+	await axios
+		.patch(`http://localhost:3000/api/v1/users/${id}`, req.body, {
+			headers: {
+				Cookie: `${req.cookies.jwt}`,
+			},
+		})
+		.then(({ data }) => {
+			res.redirect(`/users/${id}`);
 		})
 		.catch((err) => console.log(err.message));
 };

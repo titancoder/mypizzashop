@@ -177,26 +177,43 @@ exports.restrict = async (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 
 exports.partialRestrict = async (req, res, next) => {
-	const { role } = await User.findById(req.user);
+	const { role } = await User.findById(req.user).select("+role");
+
 	if (role === "alpha") {
 		req.role = "alpha";
 	} else req.role = "delta";
 	next();
 };
 
-exports.isLoggedIn = (req, res, next) => {
+exports.isLoggedIn = async (req, res, next) => {
 	const token = req.cookies.jwt;
 
 	if (!token) {
 		return next();
 	}
 
+	let id;
+
 	jwt.verify(token, "thisismysecrettoken", (err, decoded) => {
 		if (err) {
 			return next();
 		}
+
+		id = decoded.id;
+
+		req.user = decoded.id;
 		res.locals.role = decoded.role;
 		req.role = decoded.role;
 	});
+
+	try {
+		const user = await User.findById(id).select("+role");
+		req.user = user;
+		res.locals.name = user.name;
+	} catch (err) {
+		if (err) {
+			console.log(err.message);
+		}
+	}
 	next();
 };

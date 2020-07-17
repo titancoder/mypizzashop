@@ -14,7 +14,11 @@
 								<div class="pizza_hotness d-flex align-items-center mr-1">
 									<% for (let i= 0; i< pizza.hotness; i++) {%>
 
-									<img src="images/hotness.svg" alt="" />
+									<img
+										src="images/hotness.svg"
+										style="object-fit: unset;"
+										alt=""
+									/>
 									<% } %>
 								</div>
 							</div>
@@ -28,14 +32,28 @@
 							<div
 								class="pizza_card_bottom d-flex mt-auto justify-content-between"
 							>
-								<div class="pizza_price text-center"><%= pizza.price %></div>
+								<div class="pizza_price text-center">
+									<%= pizza.price %>
+								</div>
 								<% if (locals.role==='delta' || !locals.role){ %>
 								<div
-									class="add_to_cart text-center"
-									id="<%= pizza._id %> "
-									onclick="display(this)"
+									data-id="<%= pizza._id %>"
+									data-title="<%= pizza.title %>"
+									data-price="<%= pizza.price %>"
+									class="add_to_cart text-center operation_card animate__animated animate__zoomIn animate__faster"
+									onclick="addToCart(this)"
 								>
 									Add to Cart
+								</div>
+								<div
+									id="<%= pizza._id %>"
+									data-title="<%= pizza.title %>"
+									data-price="<%= pizza.price %>"
+									class="add_to_cart row text-center m-0 hide operation_card animate__animated animate__zoomIn animate__faster"
+								>
+									<div id="decrement" class="col buttons">-</div>
+									<div id="<%= pizza._id %>_qty" class="col buttons">0</div>
+									<div id="increment" class="col buttons">+</div>
 								</div>
 								<% } %> <% if (locals.role==='alpha'){ %>
 								<div class="add_to_cart text-center row m-0">

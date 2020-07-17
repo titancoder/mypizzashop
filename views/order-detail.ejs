@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+	<%- include('partials/head') %>
+	<body>
+		<div class="wrapper">
+			<%- include('partials/modal') %> <%- include('partials/header') %>
+			<div class="content">
+				<div class="pizza_cards_container my-5">
+					<% data.order.forEach(function(item){ %>
+					<div>
+						<h4><%= item.title %></h4>
+						<h4><%= item.total %></h4>
+						<h4></h4>
+					</div>
+					<%})%>
+				</div>
+			</div>
+			<%- include('partials/footer') %>
+		</div>
+		<script src="/script.js"></script>
+	</body>
+</html>

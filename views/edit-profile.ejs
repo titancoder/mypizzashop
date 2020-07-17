@@ -10,6 +10,8 @@
 						id="signup_form"
 						class="w-75 mx-auto"
 						enctype="multipart/form-data"
+						action="/users/<%= data._id %>"
+						method="POST"
 					>
 						<div>
 							<h1>Update Profile</h1>
@@ -22,11 +24,12 @@
 							<div class="col-12 col-xl-6">
 								<div class="form-group pb-1">
 									<div class="row">
-										<label for="" class="col-12 col-sm-6">Name</label>
+										<label for="" class="col-12 col-sm-6">Name </label>
 										<input
 											class="form-control input-sm col-12 col-sm-6"
 											name="name"
 											type="text"
+											value="<%= data.name %>"
 										/>
 									</div>
 								</div>
@@ -39,6 +42,7 @@
 											class="form-control input-sm col-12 col-sm-6"
 											name="email"
 											type="text"
+											value="<%= data.email %>"
 										/>
 									</div>
 								</div>
@@ -68,12 +72,9 @@
 						</div>
 					</form>
 				</div>
-				<!-- <% pizzaData.forEach(function(pizza){ %>
-				<h1><%= pizza.title %></h1>
-				<% }); %> -->
 			</div>
 			<%- include('partials/footer') %>
 		</div>
-		<script src="script.js"></script>
+		<script src="/script.js"></script>
 	</body>
 </html>

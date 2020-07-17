@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use(express.static("public", { maxAge: 3600000 }));
+app.use(express.static("public"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -49,9 +49,9 @@ app.use("/api/v1/toppings", toppingRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/", viewRoutes);
 
-// app.post("/test", upload.single("photo"), (req, res) => {
+// app.post("/test", (req, res) => {
+// 	//console.log(req.cookies);
 // 	console.log(req.body);
-// 	console.log(req.file);
 // });
 
 // app.use((err, req, res, next) => {

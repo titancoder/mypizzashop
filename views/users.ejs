@@ -8,12 +8,8 @@
 				<div class="pizza_cards_container row my-5">
 					<% data.forEach(function(item){ %>
 
-					<a
-						class="col-12"
-						href="/orders/<%= item._id %>"
-						style="color: black;"
-					>
-						<div class="row m-0 text-center orders_row">
+					<a class="col-12" href="/users/<%= item._id %>" style="color: black;">
+						<div class="row m-0 text-center">
 							<div class="order-date col-6 col-md">
 								<!-- <div class="d-flex">
 									<div class="month_">
@@ -30,7 +26,7 @@
 										</div>
 									</div>
 								</div> -->
-								<%- item.createdAt %>
+								Date
 							</div>
 							<div class="order-no col-6 col">
 								<%= item._id %>
@@ -38,9 +34,7 @@
 							<div class="order-address col-12 col-md">
 								address
 							</div>
-							<div class="order-amount col-6 col-md">
-								<%= item.amount %>
-							</div>
+							<div class="order-amount col-6 col-md"></div>
 							<div class="order-status col-6 col-md">
 								Order status
 							</div>

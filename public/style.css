@@ -240,3 +240,31 @@ img {
 input:checked + label {
 	background-color: #32e0c4;
 }
+
+.cart-qty {
+	position: absolute;
+	top: -2px;
+	right: -4px;
+	background-color: tomato;
+	color: #fff;
+	border-radius: 50%;
+	width: 50%;
+	height: 50%;
+}
+
+.buttons:nth-child(1) {
+	background-color: #ff847c;
+	color: #f7f7f7;
+}
+.buttons:nth-child(2) {
+	background-color: #eee;
+}
+
+.buttons:nth-child(3) {
+	background-color: #0fabbc;
+	color: #f7f7f7;
+}
+
+.orders_row {
+	border: 1px gray solid;
+}

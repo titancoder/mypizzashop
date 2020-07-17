@@ -22,6 +22,10 @@ exports.resizeImage = async (req, res, next) => {
 			.resize(500, 400)
 			.jpeg({ quality: 70 })
 			.toFile(`./public/images/pizza/_${req.file.filename}`);
+		await sharp(`./public/images/pizza/${req.file.filename}`)
+			.resize(170, 170)
+			.jpeg({ quality: 60 })
+			.toFile(`./public/images/thumbnails/_t${req.file.filename}`);
 		fs.unlinkSync(`./public/images/pizza/${req.file.filename}`);
 
 		req.body.image = `images/pizza/_${req.file.filename}`;

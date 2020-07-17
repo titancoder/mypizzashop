@@ -1,8 +1,11 @@
 <div class="header d-block d-sm-flex justify-content-between py-1">
 	<div class="brand d-flex justify-content-between">
 		<h3 class="px-3 my-auto">YumYum Pizza</h3>
-		<div class="m-0 p-0">
-			<img src="/images/cart.svg" alt="" />
+		<div class="m-0 p-0 d-flex" style="position: relative;">
+			<a href="/cart"><img src="/images/cart.svg" alt="" /></a>
+			<div class="cart-qty p-0 d-flex justify-content-center">
+				<span id="cart-qty" style="font-size: 0.8rem;">0</span>
+			</div>
 		</div>
 		<div class="px-3 d-sm-none my-auto" onclick="toggle()">
 			<i id="toggle" class="fa fa-bars"></i>
@@ -14,18 +17,22 @@
 		class="menu_items d-none d-sm-flex my-auto px-3 text-center"
 	>
 		<% if (locals.role==='alpha'){ %>
-		<li class="py-sm-0 py-2">Home</li>
-		<li class="py-sm-0 py-2">Users</li>
+		<li class="py-sm-0 py-2"><a href="/">Home</a></li>
+		<li class="py-sm-0 py-2"><a href="/users">Users</a></li>
 		<li class="py-sm-0 py-2"><a href="/pizza">Pizza</a></li>
-		<li class="py-sm-0 py-2">Orders</li>
-		<li class="py-sm-0 py-2">Profile</li>
+		<li class="py-sm-0 py-2"><a href="/orders">Orders</a></li>
+		<li class="py-sm-0 py-2 pr-2" style="background-color: blueviolet;">
+			<a href="/profile"><img style="border: 1px solid red;" class="mr-2" src="/images/thumbnails/thumb.jpg" alt="" /><%= locals.name %></a>
+		</li>
 		<li class="py-sm-0 py-2">Log Out</li>
 
 		<% } %> <% if (locals.role==='delta'){ %>
-		<li class="py-sm-0 py-2">Home</li>
-		<li class="py-sm-0 py-2">Orders</li>
+		<li class="py-sm-0 py-2"><a href="/">Home</a></li>
+		<li class="py-sm-0 py-2"><a href="/orders">Orders</a></li>
 		<li class="py-sm-0 py-2">Contact</li>
-		<li class="py-sm-0 py-2">Profile</li>
+		<li class="py-sm-0 py-2"style="background-color: blueviolet; onclick="placeOrder()" >
+			<a href="/profile"><img src="" alt="" /><%= locals.name %></a>
+		</li>
 		<li class="py-sm-0 py-2">Log Out</li>
 		<% } %> <% if (!locals.role){ %>
 		<li class="py-sm-0 py-2">Home</li>

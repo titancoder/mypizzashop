@@ -43,7 +43,10 @@ exports.signUp = async (req, res) => {
 	const newUser = new User(req.body);
 	try {
 		const result = await newUser.save();
-		const token = jwt.sign({ id: newUser._id }, "thisismysecrettoken");
+		const token = jwt.sign(
+			{ id: result._id, role: result.role },
+			"thisismysecrettoken"
+		);
 		res.cookie("jwt", token, {
 			maxAge: 30 * 60 * 1000,
 		});

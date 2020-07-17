@@ -9,14 +9,14 @@
 					<div>
 						<h1>Profile Page</h1>
 						<h4>Profile Image</h4>
-						<h4>Name</h4>
-						<h4>Email</h4>
-						<h4>Member Since</h4>
+						<h4><%= data.name %></h4>
+						<h4><%= data.email %></h4>
+						<h4><%= data.createdAt %></h4>
+						<a href="/users/<%= data._id %> "
+							><button class="btn btn-primary">Edit Profile</button></a
+						>
 					</div>
 				</div>
-				<!-- <% pizzaData.forEach(function(pizza){ %>
-				<h1><%= pizza.title %></h1>
-				<% }); %> -->
 			</div>
 			<%- include('partials/footer') %>
 		</div>

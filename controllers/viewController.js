@@ -1,7 +1,5 @@
 const axios = require("axios");
-
-const fs = require("fs");
-const path = require("path");
+const Razorpay = require("razorpay");
 
 exports.renderHomePage = async (req, res) => {
 	const { data } = await axios.get("http://localhost:3000/api/v1/pizza");
@@ -34,7 +32,7 @@ exports.signUpUser = (req, res) => {
 };
 
 exports.renderPizzaPage = (req, res) => {
-	if (!req.user.role || req.user.role === "delta") {
+	if (!req.user || req.user.role === "delta") {
 		res.redirect("/");
 	}
 	res.render("create-pizza");
@@ -94,8 +92,23 @@ exports.deletePizza = async (req, res) => {
 		.catch((err) => console.log(err.message));
 };
 
-exports.placeOrder = async (req, res) => {
+exports.placeOrder = async (req, res, next) => {
+	const instance = new Razorpay({
+		key_id: process.env.RAZORPAY_ID,
+		key_secret: process.env.RAZORPAY_SECRET,
+	});
+	const options = {
+		amount: `${req.body.amount * 100}`, // amount in the smallest currency unit
+		currency: "INR",
+		receipt: "receipt_177",
+		payment_capture: "0",
+	};
+	const orderData = await instance.orders.create(options);
+	console.log(orderData);
+
 	req.body.orderedBy = req.user;
+	req.body.gatewayOrderId = orderData.id;
+	req.body.status = orderData.status;
 	await axios
 		.post(`http://localhost:3000/api/v1/orders`, req.body, {
 			headers: {
@@ -103,8 +116,7 @@ exports.placeOrder = async (req, res) => {
 			},
 		})
 		.then(({ data }) => {
-			console.log(data.data);
-			res.redirect("/");
+			res.render("payment", { orderData: orderData });
 		})
 		.catch((err) => console.log(err.message));
 };

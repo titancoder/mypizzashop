@@ -22,9 +22,13 @@
 					</div>
 					<div class="text-right mt-3">
 						<% if ( role ==='delta') { %>
-						<div class="btn btn-primary" onclick="placeOrder()">
+						<button
+							class="btn btn-primary"
+							onclick="placeOrder()"
+							type="submit"
+						>
 							Order
-						</div>
+						</button>
 						<% } else { %>
 						<div class="btn btn-primary">
 							Login to Order

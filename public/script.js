@@ -167,9 +167,9 @@ const placeOrder = () => {
 		body: data,
 	})
 		.then((res) => {
-			console.log("sent");
+			return res.text();
 		})
-		.catch((err) => {
-			console.log(err);
+		.then((res) => {
+			document.write(res);
 		});
 };

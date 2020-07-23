@@ -1,6 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 // const bodyParser = require("body-parser");
 const path = require("path");
+const crypto = require("crypto");
 
 const app = express();
 const cookieParser = require("cookie-parser");
@@ -11,6 +13,7 @@ const toppingRoutes = require("./routes/toppingRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const viewRoutes = require("./routes/viewRoutes");
 const mongoose = require("mongoose");
+const Order = require("./models/order");
 const cors = require("cors");
 
 app.use(cors({ credentials: true }));
@@ -48,11 +51,29 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/toppings", toppingRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/", viewRoutes);
+app.post("/payments/status", async function (req, res) {
+	console.log(req.body);
+	const result = crypto
+		.createHmac("sha256", process.env.RAZORPAY_SECRET)
+		.update(`${req.body.razorpay_order_id}|${req.body.razorpay_payment_id}`)
+		.digest("hex");
+	if (result === req.body.razorpay_signature) {
+		const updatedOrder = await Order.findOneAndUpdate(
+			{ gatewayOrderId: `${req.body.razorpay_order_id}` },
+			{
+				status: "success",
+				gatewayPaymentId: req.body.razorpay_payment_id,
+				gatewaySignature: req.body.razorpay_signature,
+			}
+		);
+		res.status(200);
+		res.redirect("http://localhost:3000/orders");
+	}
+});
 
-// app.post("/test", (req, res) => {
-// 	//console.log(req.cookies);
-// 	console.log(req.body);
-// });
+app.use("*", (req, res) => {
+	res.send("Not Found");
+});
 
 // app.use((err, req, res, next) => {
 //   res.status(err.statusCode).json({

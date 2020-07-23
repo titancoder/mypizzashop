@@ -1,0 +1,14 @@
+<form class="payment-form" action="payments/status" method="POST">
+	<input type="hidden" custom="Hidden Element" name="hidden" />
+	<script
+		id="myscript"
+		src="https://checkout.razorpay.com/v1/checkout.js"
+		data-key="<%= `${process.env.RAZORPAY_ID}` %>"
+		data-amount="<%= orderData.amount %>"
+		data-order_id="<%= orderData.id %>"
+		data-buttontext="Pay with Razorpay"
+		data-name="Titan Coder Pizza"
+		data-description="Pizza of Titan Coder"
+		data-image="https://example.com/your_logo.jpg"
+	></script>
+</form>

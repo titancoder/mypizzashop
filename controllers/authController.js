@@ -57,14 +57,14 @@ exports.login = async (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 
 exports.forgotPassword = async (req, res) => {
-	const enteredEmail = req.body.username;
+	const enteredEmail = req.body.email;
 	const user = await User.findOne({ email: enteredEmail });
 	if (user) {
 		const resetToken = await crypto.randomBytes(64).toString("base64");
-		const hasedResetPassword = await bcrypt.hash(resetToken, 10);
-		user.resetHashedPassword = hasedResetPassword;
+		const hasedResetToken = await bcrypt.hash(resetToken, 10);
+		user.hashedResetToken = hasedResetToken;
 		user.resetToken = resetToken;
-		user.passwordResetExpiresAt = Date.now() + 2 * 60 * 1000;
+		user.passwordResetExpiresAt = Date.now() + 60 * 60 * 1000;
 
 		await user.save();
 	}
@@ -79,17 +79,18 @@ exports.forgotPassword = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 exports.resetPassword = async (req, res) => {
+	console.log(req.body);
 	const enteredToken = req.body.token;
 	const enteredPassword = req.body.password;
 
 	//FIND USER BASED ON THE RESET TOKEN
 	try {
 		const user = await User.findOne({ resetToken: enteredToken }).select(
-			"+resetHashedPassword +passwordResetExpiresAt"
+			"+hashedResetToken +passwordResetExpiresAt"
 		);
 
 		if (Date.now() > user.passwordResetExpiresAt) {
-			user.resetHashedPassword = undefined;
+			user.hashedResetToken = undefined;
 			user.resetToken = undefined;
 			user.passwordResetExpiresAt = undefined;
 			await user.save();
@@ -98,15 +99,16 @@ exports.resetPassword = async (req, res) => {
 
 		// COMPARE THE RESET HASHED PASSWORD STORED IN DB
 
-		const result = await bcrypt.compare(enteredToken, user.resetHashedPassword);
+		const result = await bcrypt.compare(enteredToken, user.hashedResetToken);
 		if (result) {
 			//IF SUCCESSFUL, UPDATE PASSWORD AND REMOVE THE UNNECESSARY FIELDS
 
 			const updatedPassword = await bcrypt.hash(enteredPassword, 10);
 			user.password = updatedPassword;
 			user.passwordUpdatedAt = Date.now();
-			user.resetHashedPassword = undefined;
+			user.hashedResetToken = undefined;
 			user.resetToken = undefined;
+			user.passwordResetExpiresAt = undefined;
 			const updatedUser = await user.save();
 
 			res.status(200).json({

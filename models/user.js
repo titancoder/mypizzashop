@@ -24,7 +24,7 @@ const userSchema = mongoose.Schema(
 			type: String,
 			select: false,
 		},
-		resetHashedPassword: {
+		hashedResetToken: {
 			type: String,
 			select: false,
 		},

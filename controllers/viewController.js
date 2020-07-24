@@ -212,3 +212,38 @@ exports.updateUser = async (req, res) => {
 		})
 		.catch((err) => console.log(err.message));
 };
+
+exports.renderForgotPassword = async (req, res) => {
+	console.log(req.body);
+	await axios
+		.post(`http://localhost:3000/api/v1/auth/forgotpassword`, req.body)
+		.then(({ data }) => {
+			res.redirect(`/`);
+		})
+		.catch((err) => console.log(err.message));
+};
+
+exports.renderResetPassword = async (req, res) => {
+	console.log(req.params.token);
+
+	const token = encodeURIComponent(req.params.token);
+	res.render("reset-password", { token: token });
+
+	// await axios
+	// 	.post(`http://localhost:3000/api/v1/auth/forgotpassword`, req.body)
+	// 	.then(({ data }) => {
+	// 		res.redirect(`/`);
+	// 	})
+	// 	.catch((err) => console.log(err.message));
+};
+
+exports.resetPassword = async (req, res) => {
+	req.body.token = req.params.token;
+
+	await axios
+		.patch(`http://localhost:3000/api/v1/auth/resetpassword`, req.body)
+		.then(({ data }) => {
+			res.redirect(`/`);
+		})
+		.catch((err) => console.log(err.message));
+};

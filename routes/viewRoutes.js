@@ -20,6 +20,9 @@ const {
 	renderUsersPage,
 	renderEditProfilePage,
 	updateUser,
+	renderForgotPassword,
+	renderResetPassword,
+	resetPassword,
 } = require("../controllers/viewController");
 
 router.route("/").get(isLoggedIn, renderHomePage);
@@ -50,5 +53,12 @@ router
 	.route("/users/:id")
 	.get(isLoggedIn, renderEditProfilePage)
 	.post(isLoggedIn, uploadImage, resizeImage, updateUser);
+
+router.route("/forgotpassword").post(renderForgotPassword);
+
+router
+	.route("/resetpassword/:token")
+	.get(renderResetPassword)
+	.post(resetPassword);
 
 module.exports = router;

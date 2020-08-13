@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { sendEmail } = require("../utils/email-sender");
 
 /* -------------------------------------------------------------------------- */
 /*                                GET ALL USERS                               */
@@ -45,7 +46,7 @@ exports.signUp = async (req, res) => {
 		const result = await newUser.save();
 		const token = jwt.sign(
 			{ id: result._id, role: result.role },
-			"thisismysecrettoken"
+			process.env.JWT_SECRET
 		);
 		res.cookie("jwt", token, {
 			maxAge: 30 * 60 * 1000,
@@ -55,6 +56,11 @@ exports.signUp = async (req, res) => {
 			success: true,
 			data: result,
 			token: token,
+		});
+		sendEmail("signup-email", {
+			name: result.name,
+			customerEmail: result.email,
+			subject: "Welcome to Yum Yum Pizza!",
 		});
 	} catch (err) {
 		console.log(err.message);

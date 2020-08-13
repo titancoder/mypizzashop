@@ -12,7 +12,6 @@ const modal = document.getElementById("modal");
 
 const openLoginForm = () => {
 	modal.style.display = "block";
-	//modal.classList.toggle("hide");
 };
 
 const closeModal = (e) => {

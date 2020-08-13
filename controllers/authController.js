@@ -33,7 +33,7 @@ exports.login = async (req, res, next) => {
 		if (result) {
 			const token = jwt.sign(
 				{ id: user._id, role: user.role },
-				"thisismysecrettoken"
+				process.env.JWT_SECRET
 			);
 
 			res.status(200).json({
@@ -145,7 +145,7 @@ exports.authorize = (req, res, next) => {
 	/*             IF JWT VERIFIED, ATTACH USER ID TO REQUEST OBEJECT             */
 	/* -------------------------------------------------------------------------- */
 
-	jwt.verify(token, "thisismysecrettoken", (err, decoded) => {
+	jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
 		if (err) {
 			res.status(400).json({
 				success: false,
@@ -196,7 +196,7 @@ exports.isLoggedIn = async (req, res, next) => {
 
 	let id;
 
-	jwt.verify(token, "thisismysecrettoken", (err, decoded) => {
+	jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
 		if (err) {
 			return next();
 		}

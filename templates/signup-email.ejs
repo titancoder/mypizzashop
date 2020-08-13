@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			href="https://fonts.googleapis.com/css?family=Nunito&display=swap"
+			rel="stylesheet"
+		/>
+		<title>Template</title>
+		<style>
+			body {
+				width: 600px;
+				margin: auto;
+				font-family: "Nunito";
+			}
+
+			.heading {
+				height: 70px;
+				text-align: center;
+				background-color: rgb(38, 184, 169);
+				font-size: 2rem;
+				color: whitesmoke;
+			}
+
+			.wrapper {
+				width: 600px;
+				margin: auto;
+			}
+
+			.activate-row {
+				text-align: center;
+				width: 70px;
+				background-color: blueviolet !important;
+				/* padding: 8px; */
+				/* border-radius: 15px; */
+				font-size: 1.2rem;
+				/* padding-left: 16px;
+				padding-right: 16px; */
+			}
+
+			.activate {
+				text-align: center;
+			}
+
+			.zero-margin {
+				margin: 0;
+			}
+
+			.inner-wrapper {
+				background-color: rgb(241, 236, 236) !important;
+				padding: 20px;
+			}
+
+			table {
+				border-spacing: 0;
+			}
+
+			a {
+				text-decoration: none;
+				color: white !important;
+				width: 70px;
+			}
+
+			.link {
+				padding: 8px 16px;
+				background-color: blueviolet !important;
+				border-radius: 15px;
+				font-size: 1.2rem;
+			}
+		</style>
+	</head>
+	<body>
+		<table class="wrapper">
+			<tr>
+				<td class="heading">
+					<p class="zero-margin">Welcome to Yum Yum's Pizza</p>
+				</td>
+			</tr>
+			<tr>
+				<table class="wrapper inner-wrapper">
+					<tr>
+						<td>
+							<p class="zero-margin">Hello <%= name %>,</p>
+							<br />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p class="zero-margin">
+								Thanks for signing up at Pizza. We look forward to satisfy your
+								hunger with some of the best pizza recipes!<br /><br />
+								Kindly click below to activate your account. Enjoy!!!!!!!!!
+							</p>
+							<br />
+						</td>
+					</tr>
+					<tr>
+						<td class="activate">
+							<!-- <a href="https://www.google.com" target="_blank" class="link"> -->
+							<!-- <div class="activate-row"> -->
+							<a href="https://www.google.com" class="link" target="_blank"
+								>Activate</a
+							>
+							<!-- </div> -->
+							<!-- </a> -->
+						</td>
+					</tr>
+				</table>
+			</tr>
+		</table>
+	</body>
+</html>

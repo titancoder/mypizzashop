@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-// const bodyParser = require("body-parser");
 const path = require("path");
 const crypto = require("crypto");
 
@@ -9,7 +8,6 @@ const cookieParser = require("cookie-parser");
 const pizzaRoutes = require("./routes/pizzaRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
-const toppingRoutes = require("./routes/toppingRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const viewRoutes = require("./routes/viewRoutes");
 const mongoose = require("mongoose");
@@ -34,12 +32,6 @@ mongoose.connect("mongodb://localhost:27017/mypizzashop", {
 	useUnifiedTopology: true,
 	useNewUrlParser: true,
 });
-
-/* -------------------------------------------------------------------------- */
-/*                                 MIDDLEWARES                                */
-/* -------------------------------------------------------------------------- */
-
-//app.use(bodyParser.urlencoded({ extended: false }));
 
 /* -------------------------------------------------------------------------- */
 /*                                MOUNT ROUTES                                */
@@ -70,17 +62,6 @@ app.post("/payments/status", async function (req, res) {
 		res.redirect("http://localhost:3000/orders");
 	}
 });
-
-app.use("*", (req, res) => {
-	res.send("Not Found");
-});
-
-// app.use((err, req, res, next) => {
-//   res.status(err.statusCode).json({
-//     status: err.status,
-//     message: err.message
-//   });
-// });
 
 /* -------------------------------------------------------------------------- */
 /*                                   SERVER                                   */

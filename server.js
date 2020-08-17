@@ -66,15 +66,15 @@ app.use("*", (req, res) => {
 	res.status(404).render("404");
 });
 
-app.use((err, req, res, next) => {
-	res.status(err.status || 500);
-	res.send({
-		error: {
-			status: err.status || 500,
-			message: err.message,
-		},
-	});
-});
+// app.use((err, req, res, next) => {
+// 	res.status(err.status || 500);
+// 	res.send({
+// 		error: {
+// 			status: err.status || 500,
+// 			message: err.message,
+// 		},
+// 	});
+// });
 
 /* -------------------------------------------------------------------------- */
 /*                                   SERVER                                   */

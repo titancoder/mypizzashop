@@ -1,11 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { isLoggedIn } = require("../controllers/authController");
+
 const {
-	uploadImage,
-	uploadUserImage,
-	resizeUserImage,
-	resizeImage,
+	pizzaImageUtility,
+	userImageUtility,
 } = require("../utils/image-utility");
 
 const {
@@ -38,12 +37,12 @@ router.route("/signup").post(signUpUser);
 router
 	.route("/pizza")
 	.get(isLoggedIn, renderPizzaPage)
-	.post(isLoggedIn, uploadImage, resizeImage, createPizza);
+	.post(isLoggedIn, createPizza);
 
 router
 	.route("/pizza/:id")
 	.get(isLoggedIn, renderEditPizzaPage)
-	.post(isLoggedIn, uploadImage, resizeImage, updatePizza);
+	.post(isLoggedIn, updatePizza);
 router.route("/pizza/:id/del").get(isLoggedIn, deletePizza);
 
 router.route("/cart").get(isLoggedIn, renderCartPage);
@@ -57,7 +56,12 @@ router.route("/users").get(isLoggedIn, renderUsersPage);
 router
 	.route("/users/:id")
 	.get(isLoggedIn, renderEditProfilePage)
-	.post(isLoggedIn, uploadUserImage, resizeUserImage, updateUser);
+	.post(
+		isLoggedIn,
+		userImageUtility.uploadImage,
+		userImageUtility.resizeImage,
+		updateUser
+	);
 
 router.route("/forgotpassword").post(renderForgotPassword);
 

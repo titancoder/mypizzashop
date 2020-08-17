@@ -1,25 +1,13 @@
 const Order = require("../models/order");
+const createError = require("http-errors");
 
-/* -------------------------------------------------------------------------- */
-/*                               GET ALL ORDERS                               */
-/* -------------------------------------------------------------------------- */
-// Method    GET
-// Endpoint  /orders
-
-/*-----------------*
-|ALL ORDERS - ADMIN|    
-*------------------*/
-/*-----------------*
-|USER ORDERS - USER|
-*------------------*/
-
-exports.getAllOrders = async (req, res) => {
-	const query = {};
-	if (req.role === "delta") {
-		query.orderedBy = req.user;
-	}
+exports.getAllOrders = async (req, res, next) => {
 	try {
-		console.log(query);
+		const query = {};
+
+		if (!req.role || req.role === "delta") {
+			query.orderedBy = req.user;
+		}
 		const allOrders = await Order.find(query);
 		res.status(200).json({
 			success: true,
@@ -31,110 +19,86 @@ exports.getAllOrders = async (req, res) => {
 	}
 };
 
-/* -------------------------------------------------------------------------- */
-/*                              CREATE NEW ORDER                              */
-/* -------------------------------------------------------------------------- */
-//Method    POST
-//Endpoint  /orders
-
-/*--------*
-|AUTHORIZE|
-*---------*/
-
-exports.addNewOrder = async (req, res) => {
+exports.addNewOrder = async (req, res, next) => {
 	try {
+		if (!req.body) {
+			throw createError(400, "Order could not be processed");
+		}
+
 		const newOrder = await Order.create(req.body);
+
+		if (!newOrder) {
+			console.log("New order creation problem");
+			throw createError(500, "Something went wrong");
+		}
 		res.status(200).json({
 			success: true,
 			data: newOrder,
 		});
 	} catch (err) {
-		console.log(err.message);
-		res.status(400).json({
-			success: false,
-			message: err.message,
-		});
+		next(err);
 	}
 };
 
-/* -------------------------------------------------------------------------- */
-/*                                UPDATE ORDER                                */
-/* -------------------------------------------------------------------------- */
-
-//Method    PATCH
-//Endpoint  /orders/:id
-
-/*--------*
-|AUTHORIZE|
-*---------*/
-
-exports.editOrder = async (req, res) => {
+exports.editOrder = async (req, res, next) => {
 	try {
+		if (!req.params.id || !req.body) {
+			console.log("Parameter ID and order body empty");
+			throw createError(400, "Order could not be updated");
+		}
+
 		const updatedOrder = await Order.findByIdAndUpdate(
 			req.params.id,
 			req.body,
 			{ new: true }
 		);
-		// const order = await Order.findOne({ _id: req.params.id });
+
+		if (!updatedOrder) {
+			console.log("Order could not be updated");
+			throw createError(400, "Order could not be updated");
+		}
 
 		res.status(200).json({
 			success: true,
 			data: updatedOrder,
 		});
 	} catch (err) {
-		res.status(400).json({
-			success: false,
-			message: err.message,
-		});
+		next(err);
 	}
 };
 
-/* -------------------------------------------------------------------------- */
-/*                                DELETE ORDER                                */
-/* -------------------------------------------------------------------------- */
-//Method    DELETE
-//Endpoint  /orders/:id
-
-/*-------*
-|RESTRICT|
-*--------*/
-
-exports.deleteOrder = async (req, res) => {
+exports.deleteOrder = async (req, res, next) => {
 	try {
+		if (!req.params.id) {
+			console.log("Order ID not given");
+			throw createError(400, "Bad Request");
+		}
 		await Order.findByIdAndDelete(req.params.id);
 		res.status(200).json({
 			success: true,
 			data: {},
 		});
 	} catch {
-		res.status(400).json({
-			success: false,
-			message: err.message,
-		});
+		next(err);
 	}
 };
 
-/* -------------------------------------------------------------------------- */
-/*                          GET SINGLE ORDER DETAILS                          */
-/* -------------------------------------------------------------------------- */
-//Method    GET
-//Endpoint  /Orders/:id
-
-/*--------*
-|AUTHORIZE|
-*---------*/
-
-exports.getOrder = async (req, res) => {
+exports.getOrder = async (req, res, next) => {
 	try {
+		if (!req.params.id) {
+			throw createError(404, "Order ID not found");
+		}
 		const order = await Order.findById(req.params.id);
+
+		if (!order) {
+			throw createError(404, "Order not found");
+		}
+
 		res.status(200).json({
 			success: true,
 			data: order,
 		});
 	} catch (err) {
-		res.status(400).json({
-			success: false,
-			message: err,
-		});
+		next(err);
 	}
 };

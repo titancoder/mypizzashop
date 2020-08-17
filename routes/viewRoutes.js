@@ -9,8 +9,8 @@ const {
 
 const {
 	renderHomePage,
-	loginUser,
-	signUpUser,
+	//loginUser,
+	//signUpUser,
 	renderPizzaPage,
 	createPizza,
 	renderEditPizzaPage,
@@ -24,15 +24,14 @@ const {
 	renderUsersPage,
 	renderEditProfilePage,
 	updateUser,
-	renderForgotPassword,
 	renderResetPassword,
 	resetPassword,
 } = require("../controllers/viewController");
 
 router.route("/").get(isLoggedIn, renderHomePage);
 
-router.route("/login").post(loginUser);
-router.route("/signup").post(signUpUser);
+//router.route("/login").post(loginUser);
+//router.route("/signup").post(signUpUser);
 
 router
 	.route("/pizza")
@@ -62,8 +61,6 @@ router
 		userImageUtility.resizeImage,
 		updateUser
 	);
-
-router.route("/forgotpassword").post(renderForgotPassword);
 
 router
 	.route("/resetpassword/:token")

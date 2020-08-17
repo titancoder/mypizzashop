@@ -1,18 +1,11 @@
 const Pizza = require("../models/pizza");
-
-/* -------------------------------------------------------------------------- */
-/*                                GET ALL PIZZAS                              */
-/* -------------------------------------------------------------------------- */
-// Method    GET
-// Endpoint  /pizza
-
-/*-------------*
-|GENERAL ACCESS|
-*--------------*/
+const createError = require("http-errors");
+const { update } = require("../models/pizza");
 
 exports.getAllPizzas = async (req, res) => {
-	const allPizzas = await Pizza.find({});
 	try {
+		const allPizzas = await Pizza.find({});
+
 		res.status(200).json({
 			success: true,
 			count: allPizzas.length,
@@ -23,71 +16,50 @@ exports.getAllPizzas = async (req, res) => {
 	}
 };
 
-/* -------------------------------------------------------------------------- */
-/*                              CREATE NEW PIZZA                              */
-/* -------------------------------------------------------------------------- */
-//Method    POST
-//Endpoint  /pizza
-
-/*-------*
-|RESTRICT|
-*--------*/
-
-exports.addNewPizza = async (req, res) => {
+exports.addNewPizza = async (req, res, next) => {
 	try {
+		if (!req.body) {
+			console.log("New Pizza could not be created");
+			throw createError(400, "Bad Request");
+		}
 		const newPizza = await Pizza.create(req.body);
+
+		if (!newPizza) {
+			throw createError(400, "New Pizza could not be added");
+		}
 		res.status(200).json({
 			success: true,
 			data: newPizza,
 		});
 	} catch (err) {
-		console.log(err.message);
-		res.status(400).json({
-			success: false,
-			message: err.message,
-		});
+		next(err);
 	}
 };
 
-/* -------------------------------------------------------------------------- */
-/*                                UPDATE PIZZA                                */
-/* -------------------------------------------------------------------------- */
-
-//Method    PATCH
-//Endpoint  /pizza/:id
-
-/*-------*
-|RESTRICT|
-*--------*/
-
-exports.editPizza = async (req, res) => {
+exports.editPizza = async (req, res, next) => {
 	try {
+		if (!req.params.id || !req.body) {
+			console.log("Parameter ID and pizza details empty");
+			throw createError(400, "Pizza could not be updated");
+		}
 		const updatedPizza = await Pizza.findByIdAndUpdate(
 			req.params.id,
 			req.body,
 			{ new: true }
 		);
+
+		if (!updatedPizza) {
+			console.log("Order could not be updated");
+			throw createError(400, "Pizza could not be updated");
+		}
 		res.status(200).json({
 			success: true,
 			data: updatedPizza,
 		});
 	} catch (err) {
-		res.status(400).json({
-			success: false,
-			message: err.message,
-		});
+		next(err);
 	}
 };
-
-/* -------------------------------------------------------------------------- */
-/*                                DELETE PIZZA                                */
-/* -------------------------------------------------------------------------- */
-//Method    DELETE
-//Endpoint  /pizza/:id
-
-/*-------*
-|RESTRICT|
-*--------*/
 
 exports.deletePizza = async (req, res) => {
 	try {
@@ -103,16 +75,6 @@ exports.deletePizza = async (req, res) => {
 		});
 	}
 };
-
-/* -------------------------------------------------------------------------- */
-/*                          GET SINGLE PIZZA DETAILS                          */
-/* -------------------------------------------------------------------------- */
-//Method    GET
-//Endpoint  /pizza/:id
-
-/*-------------*
-|GENERAL ACCESS|
-*--------------*/
 
 exports.getPizza = async (req, res) => {
 	try {

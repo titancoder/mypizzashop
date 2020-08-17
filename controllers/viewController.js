@@ -1,35 +1,39 @@
 const axios = require("axios");
 const Razorpay = require("razorpay");
+const createError = require("http-errors");
 
 exports.renderHomePage = async (req, res) => {
 	const { data } = await axios.get("http://localhost:3000/api/v1/pizza");
-
+	if (!data) {
+		console.log("Data could not be fetched");
+		throw createError(500, "Something went wrong");
+	}
 	res.render("home", { pizzaData: data.data });
 };
 
-exports.loginUser = (req, res) => {
-	axios
-		.post("http://localhost:3000/api/v1/auth/login", req.body)
-		.then(({ data }) => {
-			res.cookie("jwt", data.token, {
-				maxAge: 30 * 60 * 1000,
-			});
-			res.redirect("/");
-		})
-		.catch((err) => res.status(400).json({ message: "error" }));
-};
+// exports.loginUser = (req, res) => {
+// 	axios
+// 		.post("http://localhost:3000/api/v1/auth/login", req.body)
+// 		.then(({ data }) => {
+// 			res.cookie("jwt", data.token, {
+// 				maxAge: 30 * 60 * 1000,
+// 			});
+// 			res.redirect("/");
+// 		})
+// 		.catch((err) => res.status(400).json({ message: "error" }));
+// };
 
-exports.signUpUser = (req, res) => {
-	axios
-		.post("http://localhost:3000/api/v1/users/signup", req.body)
-		.then(({ data }) => {
-			res.cookie("jwt", data.token, {
-				maxAge: 30 * 60 * 1000,
-			});
-			res.redirect("/");
-		})
-		.catch((err) => console.log(err.message));
-};
+// exports.signUpUser = (req, res) => {
+// 	axios
+// 		.post("http://localhost:3000/api/v1/users/signup", req.body)
+// 		.then(({ data }) => {
+// 			res.cookie("jwt", data.token, {
+// 				maxAge: 30 * 60 * 1000,
+// 			});
+// 			res.redirect("/");
+// 		})
+// 		.catch((err) => console.log(err.message));
+// };
 
 exports.renderPizzaPage = (req, res) => {
 	if (!req.user || req.user.role === "delta") {
@@ -213,28 +217,11 @@ exports.updateUser = async (req, res) => {
 		.catch((err) => console.log(err.message));
 };
 
-exports.renderForgotPassword = async (req, res) => {
-	// console.log(req.body);
-	// await axios
-	// 	.post(`http://localhost:3000/api/v1/auth/forgotpassword`, req.body)
-	// 	.then(({ data }) => {
-	// 		res.redirect(`/`);
-	// 	})
-	// 	.catch((err) => console.log(err.message));
-};
-
 exports.renderResetPassword = async (req, res) => {
 	console.log(req.params.token);
 
 	const token = encodeURIComponent(req.params.token);
 	res.render("reset-password", { token: token });
-
-	// await axios
-	// 	.post(`http://localhost:3000/api/v1/auth/forgotpassword`, req.body)
-	// 	.then(({ data }) => {
-	// 		res.redirect(`/`);
-	// 	})
-	// 	.catch((err) => console.log(err.message));
 };
 
 exports.resetPassword = async (req, res) => {

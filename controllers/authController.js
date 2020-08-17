@@ -10,44 +10,46 @@ const { sendEmail } = require("../utils/email-sender");
 /* -------------------------------------------------------------------------- */
 
 exports.login = async (req, res, next) => {
-	const enteredEmail = req.body.username;
-	const enteredPassword = req.body.password;
-
 	try {
-		/*---------------------------------*
-    |CHECK IF USER WITH THE EMAIL EXITS|
-    *----------------------------------*/
+		const enteredEmail = req.body.username;
+		const enteredPassword = req.body.password;
+		if (!enteredEmail || !enteredPassword) {
+			throw createError(400, "Please provide valid username and password");
+		}
 		const user = await User.findOne({ email: enteredEmail }).select(
 			"+password +role"
 		);
 		if (!user) {
-			throw createError(400, "User not found");
+			throw createError(403, "Invalid username or password");
 		}
 
-		/*-----------------------------------------------*
-    |IF USER EXISTS, CHECK IF THE PASSWORD IS CORRECT|
-    *------------------------------------------------*/
 		const result = await bcrypt.compare(enteredPassword, user.password);
 
-		/*--------------------------------------*
-    |IF PASSWORD CORRECT, GENERATE JWT TOKEN|
-    *---------------------------------------*/
-		if (result) {
-			const token = jwt.sign(
-				{ id: user._id, role: user.role },
-				process.env.JWT_SECRET
+		if (!result) {
+			throw createError(
+				500,
+				"Something went wrong! Please try after sometime."
 			);
-
-			res.status(200).json({
-				message: "Login Success",
-				success: true,
-				token: token,
-			});
-
-			next();
-		} else {
-			throw createError(400, "Invalid username or password");
 		}
+
+		const token = jwt.sign(
+			{ id: user._id, role: user.role },
+			process.env.JWT_SECRET
+		);
+
+		if (!token) {
+			throw createError(
+				500,
+				"Something went wrong! Please try after sometime."
+			);
+		}
+
+		res.status(200).json({
+			message: "Login Success",
+			success: true,
+			token: token,
+		});
+		next();
 	} catch (err) {
 		next(err);
 	}
@@ -57,30 +59,39 @@ exports.login = async (req, res, next) => {
 /*                               FORGOT PASSWORD                              */
 /* -------------------------------------------------------------------------- */
 
-exports.forgotPassword = async (req, res) => {
-	const enteredEmail = req.body.email;
-	const user = await User.findOne({ email: enteredEmail });
-	if (user) {
-		const resetToken = await crypto.randomBytes(64).toString("base64");
-		const hasedResetToken = await bcrypt.hash(resetToken, 10);
-		user.hashedResetToken = hasedResetToken;
-		user.resetToken = resetToken;
-		user.passwordResetExpiresAt = Date.now() + 60 * 60 * 1000;
+exports.forgotPassword = async (req, res, next) => {
+	try {
+		const enteredEmail = req.body.email;
+		if (!enteredEmail) {
+			throw createError(400, "Please provide a valid email");
+		}
+		const user = await User.findOne({ email: enteredEmail });
 
-		await user.save();
+		if (user) {
+			const resetToken = crypto.randomBytes(64).toString("base64");
+			const hasedResetToken = await bcrypt.hash(resetToken, 10);
+			user.hashedResetToken = hasedResetToken;
+			user.resetToken = resetToken;
+			user.passwordResetExpiresAt = Date.now() + 60 * 60 * 1000;
 
-		sendEmail("reset-password", {
-			name: user.name,
-			customerEmail: user.email,
-			subject: "Reset Password",
-			resetToken: encodeURIComponent(resetToken),
+			await user.save();
+
+			sendEmail("reset-password", {
+				name: user.name,
+				customerEmail: user.email,
+				subject: "Reset Password",
+				resetToken: encodeURIComponent(resetToken),
+			});
+		}
+
+		res.status(200).json({
+			message:
+				"If any account is associated with the email, you will receive instructions to reset your password",
+			success: true,
 		});
+	} catch (err) {
+		next(err);
 	}
-
-	res.status(200).json({
-		message: "Forgot Password",
-		success: true,
-	});
 };
 
 /* -------------------------------------------------------------------------- */
@@ -88,11 +99,14 @@ exports.forgotPassword = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 exports.resetPassword = async (req, res, next) => {
-	const enteredToken = req.body.token;
-	const enteredPassword = req.body.password;
-
-	//FIND USER BASED ON THE RESET TOKEN
 	try {
+		const enteredToken = req.body.token;
+		const enteredPassword = req.body.password;
+
+		if (!enteredToken || !enteredPassword) {
+			throw createError(400, "Invalid Token or password");
+		}
+
 		const user = await User.findOne({ resetToken: enteredToken }).select(
 			"+hashedResetToken +passwordResetExpiresAt"
 		);
@@ -102,28 +116,34 @@ exports.resetPassword = async (req, res, next) => {
 			user.resetToken = undefined;
 			user.passwordResetExpiresAt = undefined;
 			await user.save();
-			throw createError(401, "Token expired");
+			throw createError(
+				401,
+				"Token has expired. Kindly request again to reset password"
+			);
 		}
-
-		// COMPARE THE RESET HASHED PASSWORD STORED IN DB
 
 		const result = await bcrypt.compare(enteredToken, user.hashedResetToken);
-		if (result) {
-			//IF SUCCESSFUL, UPDATE PASSWORD AND REMOVE THE UNNECESSARY FIELDS
 
-			const updatedPassword = await bcrypt.hash(enteredPassword, 10);
-			user.password = updatedPassword;
-			user.passwordUpdatedAt = Date.now();
-			user.hashedResetToken = undefined;
-			user.resetToken = undefined;
-			user.passwordResetExpiresAt = undefined;
-			const updatedUser = await user.save();
-
-			res.status(200).json({
-				success: true,
-				data: updatedUser,
-			});
+		if (!result) {
+			console.log("Unable to match password");
+			throw createError(
+				500,
+				"Something went wrong! Please try again after sometime"
+			);
 		}
+
+		const updatedPassword = await bcrypt.hash(enteredPassword, 10);
+		user.password = updatedPassword;
+		user.passwordUpdatedAt = Date.now();
+		user.hashedResetToken = undefined;
+		user.resetToken = undefined;
+		user.passwordResetExpiresAt = undefined;
+		await user.save();
+
+		res.status(200).json({
+			success: true,
+			message: "Password has been changed successfully.",
+		});
 	} catch (err) {
 		next(err);
 	}
@@ -134,33 +154,26 @@ exports.resetPassword = async (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 
 exports.authorize = (req, res, next) => {
-	// if (req.headers.authorization) {
-	// 	res.status(400).json({
-	// 		success: false,
-	// 		message: "No Authorization Token",
-	// 	});
-	// }
-
-	// if (req.headers.authorization) {
-	// 	token = req.headers.authorization.split(" ")[1];
-	// } else {
-	let token = req.headers.cookie;
-
-	/* -------------------------------------------------------------------------- */
-	/*             IF JWT VERIFIED, ATTACH USER ID TO REQUEST OBEJECT             */
-	/* -------------------------------------------------------------------------- */
-
-	jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-		if (err) {
-			res.status(400).json({
-				success: false,
-				message: err.message,
-			});
+	try {
+		let token = req.headers.cookie;
+		if (!token) {
+			throw createError(401, "Unauthorized");
 		}
-		req.user = decoded.id;
-		req.role = decoded.role;
-	});
-	next();
+		jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+			if (err) {
+				console.log("Error processing JWT token");
+				throw createError(
+					500,
+					"Something went wrong. Please try again after sometime"
+				);
+			}
+			req.user = decoded.id;
+			req.role = decoded.role;
+			next();
+		});
+	} catch (err) {
+		next(err);
+	}
 };
 
 /* -------------------------------------------------------------------------- */
@@ -168,12 +181,23 @@ exports.authorize = (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 
 exports.restrict = async (req, res, next) => {
-	const { role } = await User.findById(req.user).select("+role");
+	try {
+		const { role } = await User.findById(req.user).select("+role");
 
-	if (role === "alpha") {
-		next();
-	} else {
-		next(createError(403, "Forbidden"));
+		if (!role) {
+			console.log("Role not found on User");
+			throw createError(
+				500,
+				"Something went wrong. Please try again after sometime"
+			);
+		}
+		if (role === "alpha") {
+			next();
+		} else {
+			next(createError(403, "Forbidden"));
+		}
+	} catch (err) {
+		next(err);
 	}
 };
 
@@ -182,44 +206,58 @@ exports.restrict = async (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 
 exports.partialRestrict = async (req, res, next) => {
-	const { role } = await User.findById(req.user).select("+role");
+	try {
+		const { role } = await User.findById(req.user).select("+role");
 
-	if (role === "alpha") {
-		req.role = "alpha";
-	} else req.role = "delta";
-	next();
+		if (!role) {
+			console.log("Role not found on User");
+			throw createError(
+				500,
+				"Something went wrong. Please try again after sometime"
+			);
+		}
+
+		if (role === "alpha") {
+			req.role = "alpha";
+		} else req.role = "delta";
+		next();
+	} catch (err) {
+		next(err);
+	}
 };
 
 exports.isLoggedIn = async (req, res, next) => {
-	const token = req.cookies.jwt;
+	try {
+		const token = req.cookies.jwt;
 
-	if (!token) {
-		return next();
-	}
-
-	let id;
-
-	jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-		if (err) {
+		if (!token) {
 			return next();
 		}
 
-		id = decoded.id;
+		let id;
 
-		req.user = decoded.id;
-		res.locals.role = decoded.role;
-		req.role = decoded.role;
-	});
+		jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+			if (err) {
+				console.log("Error processing JWT token");
+				throw createError(
+					500,
+					"Something went wrong. Please try again after sometime"
+				);
+			}
 
-	try {
-		const user = await User.findById(id).select("+role");
-		req.user = user;
-		res.locals.name = user.name;
-		res.locals.img = user.image;
+			id = decoded.id;
+			req.user = decoded.id;
+			res.locals.role = decoded.role;
+			req.role = decoded.role;
+
+			const user = await User.findById(id).select("+role");
+			req.user = user;
+			res.locals.name = user.name;
+			res.locals.img = user.image;
+
+			next();
+		});
 	} catch (err) {
-		if (err) {
-			console.log(err.message);
-		}
+		next(err);
 	}
-	next();
 };

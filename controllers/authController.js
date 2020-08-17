@@ -2,6 +2,8 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+const createError = require("http-errors");
+const { sendEmail } = require("../utils/email-sender");
 
 /* -------------------------------------------------------------------------- */
 /*                                    LOGIN                                   */
@@ -19,7 +21,7 @@ exports.login = async (req, res, next) => {
 			"+password +role"
 		);
 		if (!user) {
-			throw new Error("User not found");
+			throw createError(400, "User not found");
 		}
 
 		/*-----------------------------------------------*
@@ -43,12 +45,11 @@ exports.login = async (req, res, next) => {
 			});
 
 			next();
-		} else throw new Error("Password Incorrect");
+		} else {
+			throw createError(400, "Invalid username or password");
+		}
 	} catch (err) {
-		res.status(400).json({
-			success: false,
-			message: err.message,
-		});
+		next(err);
 	}
 };
 
@@ -67,7 +68,15 @@ exports.forgotPassword = async (req, res) => {
 		user.passwordResetExpiresAt = Date.now() + 60 * 60 * 1000;
 
 		await user.save();
+
+		sendEmail("reset-password", {
+			name: user.name,
+			customerEmail: user.email,
+			subject: "Reset Password",
+			resetToken: encodeURIComponent(resetToken),
+		});
 	}
+
 	res.status(200).json({
 		message: "Forgot Password",
 		success: true,
@@ -78,8 +87,7 @@ exports.forgotPassword = async (req, res) => {
 /*                               RESET PASSWORD                               */
 /* -------------------------------------------------------------------------- */
 
-exports.resetPassword = async (req, res) => {
-	console.log(req.body);
+exports.resetPassword = async (req, res, next) => {
 	const enteredToken = req.body.token;
 	const enteredPassword = req.body.password;
 
@@ -94,7 +102,7 @@ exports.resetPassword = async (req, res) => {
 			user.resetToken = undefined;
 			user.passwordResetExpiresAt = undefined;
 			await user.save();
-			throw new Error("Token has expired");
+			throw createError(401, "Token expired");
 		}
 
 		// COMPARE THE RESET HASHED PASSWORD STORED IN DB
@@ -117,10 +125,7 @@ exports.resetPassword = async (req, res) => {
 			});
 		}
 	} catch (err) {
-		res.status(400).json({
-			success: false,
-			message: err.message,
-		});
+		next(err);
 	}
 };
 
@@ -167,11 +172,9 @@ exports.restrict = async (req, res, next) => {
 
 	if (role === "alpha") {
 		next();
-	} else
-		res.status(403).json({
-			success: false,
-			message: "Forbidden",
-		});
+	} else {
+		next(createError(403, "Forbidden"));
+	}
 };
 
 /* -------------------------------------------------------------------------- */
@@ -212,6 +215,7 @@ exports.isLoggedIn = async (req, res, next) => {
 		const user = await User.findById(id).select("+role");
 		req.user = user;
 		res.locals.name = user.name;
+		res.locals.img = user.image;
 	} catch (err) {
 		if (err) {
 			console.log(err.message);

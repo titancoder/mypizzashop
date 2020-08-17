@@ -1,12 +1,7 @@
-const toggleMenu = document.getElementById("toggle_menu");
-
-const toggle = () => {
-	if (toggleMenu.classList.contains("d-none")) {
-		toggleMenu.classList.replace("d-none", "d-block");
-	} else {
-		toggleMenu.classList.replace("d-block", "d-none");
-	}
-};
+$("#nav_menu").hide();
+$("#toggle_menu").click(function () {
+	$("#nav_menu").slideToggle();
+});
 
 const modal = document.getElementById("modal");
 
@@ -23,6 +18,13 @@ const closeModal = (e) => {
 		signup_form.style.display = "none";
 		login_label.click();
 		modal.style.display = "none";
+
+		$("#signup_form input").removeClass("error");
+		$("#signup_form").validate().resetForm();
+
+		$("#login_form input").removeClass("error");
+		$("#login_form form").validate().resetForm();
+		$(".login-error").text("");
 	}
 };
 
@@ -72,6 +74,7 @@ const addToCart = (e) => {
 		cart.push({ id, title, price, quantity, total });
 
 		qty.innerText = quantity;
+		Notiflix.Notify.Success("1 Pizza Added");
 	}
 
 	setCartQuantity();
@@ -91,12 +94,14 @@ document.addEventListener("click", (e) => {
 			cart[i].quantity++;
 			cart[i].total = cart[i].quantity * cart[i].price;
 			qty.innerText = cart[i].quantity;
+			Notiflix.Notify.Success("1 Pizza Added");
 		}
 
 		if (cart[i].quantity >= 0 && operation === "decrement") {
 			cart[i].quantity--;
 			cart[i].total = cart[i].quantity * cart[i].price;
 			qty.innerText = cart[i].quantity;
+			Notiflix.Notify.Info("1 Pizza Removed");
 			if (cart[i].quantity <= 0) {
 				toggleOperationCards("addtocart", id);
 				cart.splice(i, 1);
@@ -172,3 +177,94 @@ const placeOrder = () => {
 			document.write(res);
 		});
 };
+
+$("#login-btn").click(function (e) {
+	$("#login_form form").validate({
+		submitHandler: function (form) {
+			e.preventDefault();
+			let username = $("[name='username']").val();
+			let password = $("#login_form [name='password']").val();
+			Notiflix.Loading.Arrows("Please wait...");
+			$.post("http://localhost:3000/api/v1/auth/login", {
+				username,
+				password,
+			})
+				.done(function (data) {
+					document.cookie = `jwt=${data.token}`;
+					location.href = "/";
+					Notiflix.Loading.Remove();
+					Notiflix.Notify.Success("Sign In successful");
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					Notiflix.Loading.Remove();
+
+					$(".login-error").text(xhr.responseJSON.error.message);
+				});
+		},
+	});
+});
+
+$("#signup-btn").click(function (e) {
+	$("#signup_form").validate({
+		submitHandler: function (form) {
+			e.preventDefault();
+
+			let name = $("[name='name']").val();
+			let email = $("[name='email']").val();
+			let password = $("[name='password']").val();
+			Notiflix.Loading.Arrows("Sending...");
+			$.post("http://localhost:3000/api/v1/users/signup", {
+				name,
+				email,
+				password,
+			})
+				.done(function (data) {
+					document.cookie = `jwt=${data.token}`;
+					location.href = "/";
+					Notiflix.Loading.Remove();
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					//console.log(xhr.responseJSON.error);
+					Notiflix.Loading.Remove();
+					Notiflix.Report.Failure(
+						"Sign Up Error",
+						`${xhr.responseJSON.error.message}`,
+						"Sign Up Again"
+					);
+					$("[name='email']").after(`<p>${xhr.responseJSON.error.message}<p>`);
+				});
+		},
+	});
+});
+
+$("#fp-submit").click(function (e) {
+	$("#forgot-pass-form").validate({
+		submitHandler: function (form) {
+			e.preventDefault();
+
+			let email = $("#forgot-pass-form [name='email']").val();
+			Notiflix.Loading.Arrows("Sending...");
+
+			$.post("http://localhost:3000/api/v1/auth/forgotpassword", {
+				email,
+			})
+				.done(function (data) {
+					Notiflix.Loading.Remove();
+					Notiflix.Report.Success("Email Sent", `${data}`, "OK");
+					setTimeout(() => {
+						location.href = "/";
+					}, 3000);
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					//console.log(xhr.responseJSON.error);
+					Notiflix.Loading.Remove();
+					Notiflix.Report.Failure(
+						"Something wrong!",
+						`${xhr.responseJSON.error.message}`,
+						"Try again"
+					);
+					$("[name='email']").after(`<p>${xhr.responseJSON.error.message}<p>`);
+				});
+		},
+	});
+});

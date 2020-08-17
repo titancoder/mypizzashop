@@ -16,7 +16,7 @@ exports.loginUser = (req, res) => {
 			});
 			res.redirect("/");
 		})
-		.catch((err) => console.log(err.message));
+		.catch((err) => res.status(400).json({ message: "error" }));
 };
 
 exports.signUpUser = (req, res) => {
@@ -208,19 +208,19 @@ exports.updateUser = async (req, res) => {
 			},
 		})
 		.then(({ data }) => {
-			res.redirect(`/users/${id}`);
+			res.redirect(`/profile`);
 		})
 		.catch((err) => console.log(err.message));
 };
 
 exports.renderForgotPassword = async (req, res) => {
-	console.log(req.body);
-	await axios
-		.post(`http://localhost:3000/api/v1/auth/forgotpassword`, req.body)
-		.then(({ data }) => {
-			res.redirect(`/`);
-		})
-		.catch((err) => console.log(err.message));
+	// console.log(req.body);
+	// await axios
+	// 	.post(`http://localhost:3000/api/v1/auth/forgotpassword`, req.body)
+	// 	.then(({ data }) => {
+	// 		res.redirect(`/`);
+	// 	})
+	// 	.catch((err) => console.log(err.message));
 };
 
 exports.renderResetPassword = async (req, res) => {

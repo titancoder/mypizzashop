@@ -40,7 +40,6 @@ mongoose.connect("mongodb://localhost:27017/mypizzashop", {
 app.use("/api/v1/pizza", pizzaRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/toppings", toppingRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/", viewRoutes);
 app.post("/payments/status", async function (req, res) {
@@ -61,6 +60,16 @@ app.post("/payments/status", async function (req, res) {
 		res.status(200);
 		res.redirect("http://localhost:3000/orders");
 	}
+});
+
+app.use((err, req, res, next) => {
+	res.status(err.status || 500);
+	res.send({
+		error: {
+			status: err.status || 500,
+			message: err.message,
+		},
+	});
 });
 
 /* -------------------------------------------------------------------------- */

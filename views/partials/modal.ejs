@@ -24,13 +24,14 @@
 			</div>
 		</div>
 		<div id="login_form">
-			<form id="forms" class="w-75 mx-auto" action="/login" method="POST">
+			<form id="forms" class="w-75 mx-auto">
 				<div class="form-group pb-2">
 					<input
 						class="form-control input-sm"
 						name="username"
 						type="text"
 						placeholder="Username"
+						required
 					/>
 				</div>
 				<div class="form-group pb-0 pb-lg-2 mb-1 mb-lg-2">
@@ -39,10 +40,16 @@
 						name="password"
 						type="password"
 						placeholder="Password"
+						required
 					/>
 				</div>
+				<span class="login-error"></span>
 
-				<button type="submit" class="button py-1 mt-1 col-lg-6 col-12">
+				<button
+					id="login-btn"
+					type="submit"
+					class="button py-1 mt-1 col-lg-6 col-12"
+				>
 					Login
 				</button>
 			</form>
@@ -58,18 +65,14 @@
 			<!-- </div> -->
 		</div>
 
-		<form
-			id="signup_form"
-			action="/signup"
-			method="POST"
-			class="w-75 mx-auto hide"
-		>
+		<form id="signup_form" class="w-75 mx-auto hide">
 			<div class="form-group pb-2">
 				<input
 					class="form-control input-sm"
 					name="name"
 					type="text"
 					placeholder="Name"
+					required
 				/>
 			</div>
 			<div class="form-group pb-2">
@@ -78,6 +81,7 @@
 					name="email"
 					type="text"
 					placeholder="Email"
+					required
 				/>
 			</div>
 			<div class="form-group pb-2">
@@ -86,6 +90,7 @@
 					name="password"
 					type="password"
 					placeholder="Password"
+					required
 				/>
 			</div>
 			<div class="form-group pb-2">
@@ -94,10 +99,11 @@
 					name="confirm"
 					type="password"
 					placeholder="Confirm Password"
+					required
 				/>
 			</div>
 			<div class="row justify-content-end m-0">
-				<button type="submit" class="py-1 col-lg-6 button">
+				<button id="signup-btn" type="submit" class="py-1 col-lg-6 button">
 					Sign Up
 				</button>
 			</div>
@@ -114,17 +120,22 @@
 			Forgot Password
 		</div>
 		<div class="fp_form">
-			<form id="" class="w-75 mx-auto" method="POST" action="/forgotpassword">
+			<form id="forgot-pass-form" class="w-75 mx-auto">
 				<div class="form-group pb-0 pb-lg-2 mb-1 mb-lg-2">
 					<input
 						class="form-control input-sm"
 						name="email"
 						type="text"
 						placeholder="Email"
+						required
 					/>
 				</div>
 				<div class="form_footer row m-0">
-					<button type="submit" class="button py-1 col-lg-6 col-12">
+					<button
+						id="fp-submit"
+						type="submit"
+						class="button py-1 col-lg-6 col-12"
+					>
 						Submit
 					</button>
 				</div>

@@ -7,33 +7,62 @@
 				<span id="cart-qty" style="font-size: 0.8rem;">0</span>
 			</div>
 		</div>
-		<div class="px-3 d-sm-none my-auto" onclick="toggle()">
+		<div
+			id="toggle_menu"
+			class="px-3 d-sm-none my-auto"
+			style="cursor: pointer;"
+		>
 			<i id="toggle" class="fa fa-bars"></i>
 		</div>
 	</div>
 
-	<ul
-		id="toggle_menu"
-		class="menu_items d-none d-sm-flex my-auto px-3 text-center"
-	>
+	<ul id="nav_menu" class="menu_items d-sm-flex my-auto px-3 text-center">
 		<% if (locals.role==='alpha'){ %>
-		<li class="py-sm-0 py-2"><a href="/">Home</a></li>
-		<li class="py-sm-0 py-2"><a href="/users">Users</a></li>
-		<li class="py-sm-0 py-2"><a href="/pizza">Pizza</a></li>
-		<li class="py-sm-0 py-2"><a href="/orders">Orders</a></li>
-		<li class="py-sm-0 py-2 pr-2" style="background-color: blueviolet;">
-			<a href="/profile"><img style="border: 1px solid red;" class="mr-2" src="/images/thumbnails/thumb.jpg" alt="" /><%= locals.name %></a>
+		<li class="py-sm-0 py-2 my-auto"><a href="/">Home</a></li>
+		<li class="py-sm-0 py-2 my-auto"><a href="/users">Users</a></li>
+		<li class="py-sm-0 py-2 my-auto"><a href="/pizza">Pizza</a></li>
+		<li class="py-sm-0 py-2 my-auto"><a href="/orders">Orders</a></li>
+		<li class="py-sm-0 p-2 profile_name my-auto">
+			<a
+				href="/profile"
+				class="d-flex justify-content-center"
+				style="color: #1c9c87;"
+			>
+				<img
+					style="height: 100%;"
+					class="rounded-circle p-1 my-auto"
+					src="/images/thumbnails/_t5065548f1fed45385254b6545c0d.jpg"
+					alt=""
+				/>
+				<span class="my-auto">
+					<%= locals.name.split(" ")[0] %>
+				</span>
+			</a>
 		</li>
-		<li class="py-sm-0 py-2">Log Out</li>
+		<li class="py-sm-0 py-2 my-auto"><a href="/logout">Log Out</a></li>
 
 		<% } %> <% if (locals.role==='delta'){ %>
-		<li class="py-sm-0 py-2"><a href="/">Home</a></li>
-		<li class="py-sm-0 py-2"><a href="/orders">Orders</a></li>
-		<li class="py-sm-0 py-2">Contact</li>
-		<li class="py-sm-0 py-2"style="background-color: blueviolet; onclick="placeOrder()" >
-			<a href="/profile"><img src="" alt="" /><%= locals.name %></a>
+		<li class="py-sm-0 py-2 my-auto"><a href="/">Home</a></li>
+		<li class="py-sm-0 py-2 my-auto"><a href="/orders">Orders</a></li>
+		<li class="py-sm-0 py-2 my-auto"><a href="/contact">Contact</a></li>
+		<li class="py-sm-0 p-2 profile_name my-auto">
+			<a
+				href="/profile"
+				class="d-flex justify-content-center"
+				style="color: #1c9c87;"
+			>
+				<img
+					style="height: 100%;"
+					class="rounded-circle p-1 my-auto"
+					src="<%= locals.img %>"
+					alt=""
+				/>
+				<span class="my-auto">
+					<%= locals.name.split(" ")[0] %>
+				</span>
+			</a>
 		</li>
-		<li class="py-sm-0 py-2">Log Out</li>
+		<li class="py-sm-0 py-2 my-auto"><a href="/logout">Log Out</a></li>
 		<% } %> <% if (!locals.role){ %>
 		<li class="py-sm-0 py-2">Home</li>
 		<li class="py-sm-0 py-2">About Us</li>

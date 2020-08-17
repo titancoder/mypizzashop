@@ -19,6 +19,11 @@ const userSchema = mongoose.Schema(
 			required: [true, "Please enter a password"],
 			select: false,
 		},
+		image: {
+			type: String,
+			// unique: true,
+			default: "/images/thumbnails/_t5065548f1fed45385254b6545c0d.jpg",
+		},
 
 		resetToken: {
 			type: String,

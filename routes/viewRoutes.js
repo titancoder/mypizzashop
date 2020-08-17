@@ -1,7 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const { isLoggedIn } = require("../controllers/authController");
-const { uploadImage, resizeImage } = require("../utils/image-utility");
+const {
+	uploadImage,
+	uploadUserImage,
+	resizeUserImage,
+	resizeImage,
+} = require("../utils/image-utility");
 
 const {
 	renderHomePage,
@@ -52,7 +57,7 @@ router.route("/users").get(isLoggedIn, renderUsersPage);
 router
 	.route("/users/:id")
 	.get(isLoggedIn, renderEditProfilePage)
-	.post(isLoggedIn, uploadImage, resizeImage, updateUser);
+	.post(isLoggedIn, uploadUserImage, resizeUserImage, updateUser);
 
 router.route("/forgotpassword").post(renderForgotPassword);
 

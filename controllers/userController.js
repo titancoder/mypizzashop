@@ -2,6 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { sendEmail } = require("../utils/email-sender");
+const createError = require("http-errors");
 
 /* -------------------------------------------------------------------------- */
 /*                                GET ALL USERS                               */
@@ -39,10 +40,16 @@ exports.getAllUsers = async (req, res) => {
 |GENERAL ACCESS|
 *--------------*/
 
-exports.signUp = async (req, res) => {
-	req.body.password = bcrypt.hashSync(req.body.password, 10);
-	const newUser = new User(req.body);
+exports.signUp = async (req, res, next) => {
 	try {
+		const user = await User.findOne({ email: req.body.email });
+		if (user) {
+			throw createError(400, "Email must be unique");
+		}
+
+		req.body.password = bcrypt.hashSync(req.body.password, 10);
+		const newUser = new User(req.body);
+
 		const result = await newUser.save();
 		const token = jwt.sign(
 			{ id: result._id, role: result.role },
@@ -63,11 +70,7 @@ exports.signUp = async (req, res) => {
 			subject: "Welcome to Yum Yum Pizza!",
 		});
 	} catch (err) {
-		console.log(err.message);
-		res.status(400).json({
-			success: false,
-			message: err,
-		});
+		next(err);
 	}
 };
 

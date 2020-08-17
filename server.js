@@ -62,6 +62,10 @@ app.post("/payments/status", async function (req, res) {
 	}
 });
 
+app.use("*", (req, res) => {
+	res.status(404).render("404");
+});
+
 app.use((err, req, res, next) => {
 	res.status(err.status || 500);
 	res.send({
